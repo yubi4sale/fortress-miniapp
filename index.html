@@ -465,17 +465,29 @@ async function exportBackup(){
     haptic('medium');
     const payload=JSON.stringify({version:1,exported:new Date().toISOString(),roadmap,snapshots:historyLog},null,2);
     const date=new Date().toISOString().slice(0,10);
-    // 브라우저: 파일 다운로드 시도
-    try{
+    const fname=`fortress_backup_${date}.json`;
+
+    if(!isTelegram){
+        // 브라우저: 파일 다운로드
         const blob=new Blob([payload],{type:'application/json'});
         const url=URL.createObjectURL(blob);
-        const a=document.createElement('a');a.href=url;a.download=`fortress_backup_${date}.json`;
+        const a=document.createElement('a');a.href=url;a.download=fname;
         document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
         showAlert(`✅ 백업 완료!\n스냅샷 ${historyLog.length}건`);
-    }catch(e){
-        // 텔레그램 미니앱에서 다운로드 안 되면 클립보드 복사
-        try{await navigator.clipboard.writeText(payload);showAlert(`✅ 클립보드에 복사됨!\n스냅샷 ${historyLog.length}건\n\n메모장에 붙여넣기 하세요.`);}
-        catch(e2){showAlert('백업 실패: '+e2.message);}
+        return;
+    }
+    // 텔레그램: textarea 선택 → execCommand copy (가장 호환성 높음)
+    const ta=document.createElement('textarea');
+    ta.value=payload;ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
+    document.body.appendChild(ta);ta.focus();ta.select();
+    let copied=false;
+    try{copied=document.execCommand('copy');}catch(e){}
+    document.body.removeChild(ta);
+    if(copied){
+        showAlert(`✅ 클립보드에 복사됨!\n스냅샷 ${historyLog.length}건\n\n메모장에 붙여넣기 해서 보관하세요.`);
+    }else{
+        // execCommand도 안 되면 데이터를 봇 채팅으로 전송
+        try{tg.sendData(payload);} catch(e){showAlert('백업 실패: 텔레그램에서 클립보드 접근이 제한됩니다.');}
     }
 }
 
@@ -483,10 +495,20 @@ async function exportBackup(){
 function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
 
 // ==================== INIT ====================
-async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);
-    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers()]);
-    updateRoadmap();
-    try{const saved=await sGet('ft_lastKrw');if(saved){krwInput.value=formatWithCommas(saved);render();}}catch(e){}}
+async function init(){
+    // 1. UI 즉시 렌더 (데이터 없이)
+    updateYearUI();updateClock();updateRoadmap();
+    setInterval(updateClock,1000);
+
+    // 2. 저장된 KRW 복원 (빠름 - 단일 키)
+    try{const saved=await sGet('ft_lastKrw');if(saved){krwInput.value=formatWithCommas(saved);}}catch(e){}
+
+    // 3. 시세 + 스냅샷 + 로드맵 병렬 로드 (각각 독립, 실패해도 나머지 진행)
+    fetchTickers();
+    setInterval(fetchTickers,3000);
+    loadRoadmap().then(()=>updateRoadmap());
+    loadAllSnapshots();
+}
 init();
 </script>
 </body>
