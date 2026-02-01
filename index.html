@@ -456,11 +456,8 @@ function updateClock(){const n=new Date();document.getElementById('clock-date').
 const GAS_URL = "https://script.google.com/macros/s/AKfycbzmlWwtrc-svURyEg8t6fON5UcXy4oCd5RLJ8rFgt3OR6DPGrtQp8aMkVwETRFCDgR3/exec";
 
 async function checkMigration() {
-    // 이미 마이그레이션 했으면 배너 숨김
     const done = await sGet('ft_migrated');
     if (done === 'true') return;
-    // 기록이 이미 있으면 배너 숨김 (이전 기록 없이 새로 시작한 사용자)
-    if (historyLog.length > 5) return;
     document.getElementById('migrate-banner').style.display = 'block';
 }
 
@@ -531,6 +528,8 @@ document.getElementById('migrate-dismiss-btn').onclick = async () => {
 // ==================== INIT ====================
 async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);setInterval(fetchForex,30000);
     await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers(),fetchForex()]);
+    // 재마이그레이션을 위해 플래그 리셋 (이 줄은 마이그레이션 완료 후 제거)
+    await sSet('ft_migrated', 'false');
     checkMigration();}
 init();
 </script>
