@@ -385,7 +385,12 @@ function updateHistory(){const tb=document.getElementById('history-body');tb.inn
         const star=h.isPast?'<span class="text-amber-400">*</span>':'';
         const btcDisplay=h.b?shortPrice(h.b)+star:'-';
         const xautDisplay=h.x?shortPrice(h.x)+star:'-';
-        tb.innerHTML+=`<tr class="hover:bg-gray-50 transition-colors"><td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${idx}"></td><td class="p-3 mono text-[10px]"><div class="opacity-50">${h.date.split(' . ').slice(1,3).join('/')}</div><div class="font-bold">${displayTime}</div></td><td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td><td class="p-3 text-right mono text-[10px]">${btcDisplay}</td><td class="p-3 text-right mono text-[10px] text-amber-500">${xautDisplay}</td><td class="p-3 text-right font-bold mono text-sm">₩ ${formatWithCommas(h.krw)}</td></tr>`;});
+        const btcFull=h.b?Math.round(h.b).toLocaleString():'';
+        const xautFull=h.x?Math.round(h.x).toLocaleString():'';
+        const pastNote=h.isPast?' (종가)':' (실시간)';
+        tb.innerHTML+=`<tr class="hover:bg-gray-50 transition-colors"><td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${idx}"></td><td class="p-3 mono text-[10px]"><div class="opacity-50">${h.date.split(' . ').slice(1,3).join('/')}</div><div class="font-bold">${displayTime}</div></td><td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td><td class="p-3 text-right mono text-[10px] cursor-pointer active:opacity-50" data-detail="BTC${pastNote}\n₩ ${btcFull}">${btcDisplay}</td><td class="p-3 text-right mono text-[10px] text-amber-500 cursor-pointer active:opacity-50" data-detail="XAUT${pastNote}\n₩ ${xautFull}">${xautDisplay}</td><td class="p-3 text-right font-bold mono text-sm">₩ ${formatWithCommas(h.krw)}</td></tr>`;});
+    // 가격 셀 터치 → 상세 알림
+    document.querySelectorAll('[data-detail]').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();haptic('light');showAlert(el.dataset.detail);}));
     document.querySelectorAll('.log-item-checkbox').forEach(cb=>cb.addEventListener('change',()=>{const all=document.querySelectorAll('.log-item-checkbox');document.getElementById('select-all-logs').checked=all.length>0&&Array.from(all).every(c=>c.checked);}));
     updateChart();}
 
