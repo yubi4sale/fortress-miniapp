@@ -250,7 +250,8 @@ async function saveAllSnapshots() {
         for (let i=0;i<newN;i++) await sSet(`ft_c_${i}`, JSON.stringify(historyLog.slice(i*CHUNK_SIZE,(i+1)*CHUNK_SIZE)));
         if (oldN > newN) { const del=[]; for(let i=newN;i<oldN;i++) del.push(`ft_c_${i}`); if(del.length) await sRemoveItems(del); }
         await sSet('ft_meta', JSON.stringify({chunks:newN}));
-    } catch(e) { console.error("Save Error:",e); showAlert("저장 실패"); }
+        return true;
+    } catch(e) { console.error("Save Error:",e); showAlert("저장 실패"); return false; }
     finally { setSyncState(false); }
 }
 
@@ -270,11 +271,12 @@ async function appendSnapshot(record) {
             n++;
             await sSet('ft_meta', JSON.stringify({chunks:n}));
         }
-        historyLog.push(record);
-        updateHistory();
-        haptic('success');
-    } catch(e) { console.error("Append Error:",e); showAlert("저장 실패"); }
+    } catch(e) { console.error("Append Error:",e); showAlert("저장 실패"); return; }
     finally { setSyncState(false); }
+    // UI 업데이트는 저장 성공 후 별도 처리 (에러가 저장 실패로 오인되지 않게)
+    historyLog.push(record);
+    try { updateHistory(); } catch(e) { console.error("UI update error:",e); }
+    haptic('success');
 }
 
 // ==================== ROADMAP STORAGE ====================
@@ -371,7 +373,16 @@ function updateHistory(){const tb=document.getElementById('history-body');tb.inn
 
 document.getElementById('select-all-logs').onclick=e=>document.querySelectorAll('.log-item-checkbox').forEach(c=>c.checked=e.target.checked);
 document.getElementById('delete-selected-btn').onclick=async()=>{const sel=document.querySelectorAll('.log-item-checkbox:checked');if(!sel.length)return;
-    showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`,async ok=>{if(ok){haptic('warning');[...sel].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a).forEach(i=>historyLog.splice(i,1));await saveAllSnapshots();updateHistory();}});};
+    showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`,async ok=>{if(ok){
+        try{
+            haptic('warning');
+            const idxs=[...sel].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
+            idxs.forEach(i=>historyLog.splice(i,1));
+            const saved=await saveAllSnapshots();
+            updateHistory();
+            if(saved) showAlert(`${idxs.length}개 기록 삭제 완료`);
+        }catch(e){console.error("Delete error:",e);updateHistory();}
+    }});};
 
 // ==================== CHART ====================
 function updateChart(){const ctx=document.getElementById('assetChart').getContext('2d');const ys=selectedYear.toString();const sl=sortLogs(historyLog.map(h=>({...h,pct:parseFloat(h.pct)}))).filter(h=>h.date.includes(ys));
