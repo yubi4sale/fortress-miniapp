@@ -131,14 +131,10 @@
             <div class="flex justify-between mt-2"><p class="text-[10px] font-bold opacity-50" id="mission-info">-</p><p class="text-[10px] font-bold mono" id="mission-remain">₩ 0</p></div>
         </div>
         <h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font flex items-center gap-2"><span class="material-symbols-outlined text-sm">sensors</span> Market Tickers</h3>
-        <div class="grid grid-cols-2 gap-3 mb-6">
-            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font mb-1">Bitcoin</p><p class="text-lg font-black mono" id="btc-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="btc-change">-</p></div>
-            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider text-amber-500 brand-font mb-1">PAX Gold</p><p class="text-lg font-black mono text-amber-500" id="xaut-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="xaut-change">-</p></div>
-        </div>
         <div class="grid grid-cols-3 gap-3 mb-6">
-            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">김프</p><p class="text-sm font-black mono text-emerald-500" id="kimp-value">0.00%</p></div>
-            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USD/KRW</p><p class="text-sm font-black mono" id="usd-rate">₩ 0</p></div>
-            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USDT</p><p class="text-sm font-black mono text-sky-500" id="usdt-rate">₩ 0</p></div>
+            <div class="card p-3"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font mb-1">Bitcoin</p><p class="text-sm font-black mono" id="btc-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="btc-change">-</p></div>
+            <div class="card p-3"><p class="text-[9px] font-bold uppercase tracking-wider text-amber-500 brand-font mb-1">XAUT (Gold 1oz)</p><p class="text-sm font-black mono text-amber-500" id="xaut-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="xaut-change">-</p></div>
+            <div class="card p-3"><p class="text-[9px] font-bold uppercase tracking-wider text-sky-500 brand-font mb-1">USDT</p><p class="text-sm font-black mono text-sky-500" id="usdt-rate">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="usdt-change">-</p></div>
         </div>
         <div class="card p-4"><h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font">달성률 추이</h3><div class="relative h-[180px] w-full"><canvas id="assetChart"></canvas></div></div>
     </div>
@@ -296,7 +292,7 @@ async function saveRoadmap() {
 const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 let roadmap = [{year:2026,btc:0.25,xaut:8.04},{year:2027,btc:0.45,xaut:14.47},{year:2028,btc:0.65,xaut:20.90},{year:2029,btc:0.85,xaut:27.33},{year:2030,btc:1.00,xaut:32.15}];
 let historyLog = [];
-let state = {btc:null,bC:null,xaut:null,xC:null,usdt:null,uC:null,usd:null,bPrev:0,xPrev:0,uPrev:0};
+let state = {btc:null,bC:null,xaut:null,xC:null,usdt:null,uC:null,bPrev:0,xPrev:0,uPrev:0};
 let lastP = {btc:0,xaut:0,usdt:0,usd:0};
 let isEditing = false, assetChart = null;
 let selectedYear = Math.max(new Date().getFullYear(), 2026);
@@ -331,14 +327,12 @@ function clearInput(){haptic('light');krwInput.value='';updateMissionGauge(0);}
 
 // ==================== API ====================
 async function fetchTickers(){try{const r=await fetch('https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-XAUT,KRW-USDT');const d=await r.json();const b=d.find(x=>x.market==='KRW-BTC'),x=d.find(x=>x.market==='KRW-XAUT'),u=d.find(x=>x.market==='KRW-USDT');if(b&&x&&u){state.btc=b.trade_price;state.bC=b.signed_change_rate;state.bPrev=b.prev_closing_price;state.xaut=x.trade_price;state.xC=x.signed_change_rate;state.xPrev=x.prev_closing_price;state.usdt=u.trade_price;state.uC=u.signed_change_rate;state.uPrev=u.prev_closing_price;document.getElementById('status-dot').className="w-2 h-2 bg-emerald-500 rounded-full blink";render();}}catch(e){document.getElementById('status-dot').className="w-2 h-2 bg-rose-500 rounded-full";}}
-async function fetchForex(){try{const r=await fetch('https://polling.finance.naver.com/api/realtime/domestic/exchange/FX_USDKRW');const d=await r.json();if(d?.datas?.[0]){const item=d.datas[0];const rate=parseFloat(item.closePrice||0);if(rate>0)state.usd=rate;}render();}catch(e){console.error("Forex error:",e);}}
 
 // ==================== RENDER ====================
 function render(){
     updateUI('btc-price',state.btc,lastP.btc,"₩ ");updateChangeUI('btc-change',state.bC);
     updateUI('xaut-price',state.xaut,lastP.xaut,"₩ ");updateChangeUI('xaut-change',state.xC);
-    updateUI('usdt-rate',state.usdt,lastP.usdt,"₩ ");updateUI('usd-rate',state.usd,lastP.usd,"₩ ");
-    if(state.usdt&&state.usd){const k=((state.usdt/state.usd)-1)*100;const el=document.getElementById('kimp-value');el.innerText=`${k>0?'+':''}${k.toFixed(2)}%`;el.className=`text-sm font-black mono ${k>0?'text-emerald-500':'text-blue-500'}`;}
+    updateUI('usdt-rate',state.usdt,lastP.usdt,"₩ ");updateChangeUI('usdt-change',state.uC);
     if(state.btc&&state.xaut){const yr=new Date().getFullYear();let m=roadmap.find(r=>r.year===yr);if(!m){ensureRoadmapCoverage(yr);m=roadmap.find(r=>r.year===yr);}
         const tv=(state.btc*m.btc)+(state.xaut*m.xaut);const ptv=(state.bPrev*m.btc)+(state.xPrev*m.xaut);const diff=tv-ptv;
         document.getElementById('total-krw').innerText="₩ "+Math.round(tv).toLocaleString();
@@ -453,8 +447,8 @@ async function saveSnapshot(){
 function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
 
 // ==================== INIT ====================
-async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);setInterval(fetchForex,30000);
-    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers(),fetchForex()]);}
+async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);
+    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers()]);}
 init();
 </script>
 </body>
