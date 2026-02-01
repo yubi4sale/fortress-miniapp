@@ -14,7 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
     
     <script>
-        // Tailwind config for Telegram theme
         tailwind.config = {
             theme: {
                 extend: {
@@ -41,11 +40,7 @@
             --primary-amber: #f59e0b;
             --tg-viewport-height: 100vh;
         }
-        
-        * {
-            -webkit-tap-highlight-color: transparent;
-        }
-        
+        * { -webkit-tap-highlight-color: transparent; }
         body {
             background-color: var(--tg-theme-bg-color, #f5f5f5);
             color: var(--tg-theme-text-color, #1e293b);
@@ -54,116 +49,40 @@
             min-height: var(--tg-viewport-height, 100vh);
             padding-bottom: env(safe-area-inset-bottom, 20px);
         }
-        
         .brand-font { font-family: 'Plus Jakarta Sans', sans-serif; }
         .mono { font-family: 'JetBrains Mono', monospace; }
-        
-        .glass { 
-            background: var(--tg-theme-secondary-bg-color, rgba(255, 255, 255, 0.9)); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid var(--tg-theme-hint-color, rgba(0, 0, 0, 0.05));
-        }
-        
-        .card {
-            background: var(--tg-theme-secondary-bg-color, #ffffff);
-            border-radius: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        
+        .glass { background: var(--tg-theme-secondary-bg-color, rgba(255,255,255,0.9)); backdrop-filter: blur(12px); border: 1px solid var(--tg-theme-hint-color, rgba(0,0,0,0.05)); }
+        .card { background: var(--tg-theme-secondary-bg-color, #ffffff); border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .price-up { color: #dc2626; animation: flash-red 0.6s ease-out; }
         .price-down { color: #2563eb; animation: flash-blue 0.6s ease-out; }
-        
-        @keyframes flash-red { from { background-color: rgba(220, 38, 38, 0.1); } to { background-color: transparent; } }
-        @keyframes flash-blue { from { background-color: rgba(37, 99, 235, 0.1); } to { background-color: transparent; } }
-        
-        .progress-fill { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes flash-red { from { background-color: rgba(220,38,38,0.1); } to { background-color: transparent; } }
+        @keyframes flash-blue { from { background-color: rgba(37,99,235,0.1); } to { background-color: transparent; } }
+        .progress-fill { transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
         .blink { animation: blink 2s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        
+        @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
         .syncing { animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* Modal */
         .modal { transition: opacity 0.25s ease; }
         body.modal-active { overflow: hidden; }
-        
-        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--tg-theme-hint-color, #cbd5e1); border-radius: 10px; }
-        
-        /* Nav arrows */
-        .nav-arrow {
-            font-size: 1.25rem; 
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-        }
+        .nav-arrow { font-size:1.25rem; font-weight:700; cursor:pointer; transition:all 0.2s; user-select:none; display:flex; align-items:center; justify-content:center; width:2.5rem; height:2.5rem; border-radius:50%; }
         .nav-arrow.active { color: var(--tg-theme-text-color, #475569); }
-        .nav-arrow.active:hover, .nav-arrow.active:active { 
-            color: var(--primary-blue); 
-            background-color: var(--tg-theme-secondary-bg-color, #f1f5f9); 
-        }
+        .nav-arrow.active:hover,.nav-arrow.active:active { color: var(--primary-blue); background-color: var(--tg-theme-secondary-bg-color, #f1f5f9); }
         .nav-arrow.disabled { color: var(--tg-theme-hint-color, #e2e8f0); pointer-events: none; }
-        
-        /* Tab navigation */
-        .tab-btn {
-            flex: 1;
-            padding: 12px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-radius: 12px;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        .tab-btn.active {
-            background: var(--primary-blue);
-            color: white;
-        }
-        .tab-btn:not(.active) {
-            background: var(--tg-theme-secondary-bg-color, #f1f5f9);
-            color: var(--tg-theme-hint-color, #64748b);
-        }
-        
-        /* Section visibility */
+        .tab-btn { flex:1; padding:12px 8px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-radius:12px; transition:all 0.2s; display:flex; flex-direction:column; align-items:center; gap:4px; }
+        .tab-btn.active { background: var(--primary-blue); color: white; }
+        .tab-btn:not(.active) { background: var(--tg-theme-secondary-bg-color, #f1f5f9); color: var(--tg-theme-hint-color, #64748b); }
         .section { display: none; }
         .section.active { display: block; }
-        
-        /* Input styling for dark mode */
-        input[type="text"], input[type="number"] {
-            background: var(--tg-theme-secondary-bg-color, #f8fafc);
-            color: var(--tg-theme-text-color, #1e293b);
-            border: 1px solid var(--tg-theme-hint-color, #e2e8f0);
-        }
-        input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-        }
-        
-        /* Scrollable table */
+        input[type="text"],input[type="number"] { background: var(--tg-theme-secondary-bg-color, #f8fafc); color: var(--tg-theme-text-color, #1e293b); border: 1px solid var(--tg-theme-hint-color, #e2e8f0); }
+        input:focus { outline:none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(14,165,233,0.1); }
         .scrollable-table { max-height: 400px; overflow-y: auto; }
     </style>
 </head>
-
 <body class="selection:bg-sky-100 selection:text-sky-900">
-
-<!-- Main Container -->
 <div class="max-w-lg mx-auto px-4 py-4 pb-24">
-    
-    <!-- Header -->
     <header class="flex justify-between items-center mb-6">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl glass flex items-center justify-center">
@@ -179,934 +98,330 @@
             <p class="text-lg font-bold mono leading-none" id="clock-time">00:00:00</p>
         </div>
     </header>
-    
-    <!-- Status Bar -->
     <div class="glass p-3 rounded-xl flex items-center gap-3 mb-6 border-l-4 border-l-sky-500">
         <span class="w-2 h-2 bg-emerald-500 rounded-full blink" id="status-dot"></span>
         <span class="text-xs font-medium opacity-70 flex-1">실시간 시세 연동 중</span>
         <span class="text-[10px] font-bold mono opacity-50" id="user-name"></span>
     </div>
-
-    <!-- Tab Navigation -->
     <div class="flex gap-2 mb-6" id="tab-nav">
-        <button class="tab-btn active" data-tab="dashboard">
-            <span class="material-symbols-outlined text-lg">dashboard</span>
-            대시보드
-        </button>
-        <button class="tab-btn" data-tab="roadmap">
-            <span class="material-symbols-outlined text-lg">route</span>
-            로드맵
-        </button>
-        <button class="tab-btn" data-tab="history">
-            <span class="material-symbols-outlined text-lg">history</span>
-            기록
-        </button>
+        <button class="tab-btn active" data-tab="dashboard"><span class="material-symbols-outlined text-lg">dashboard</span>대시보드</button>
+        <button class="tab-btn" data-tab="roadmap"><span class="material-symbols-outlined text-lg">route</span>로드맵</button>
+        <button class="tab-btn" data-tab="history"><span class="material-symbols-outlined text-lg">history</span>기록</button>
     </div>
-
-    <!-- ==================== DASHBOARD SECTION ==================== -->
+    <!-- DASHBOARD -->
     <div class="section active" id="section-dashboard">
-        
-        <!-- Target Value Cards -->
         <div class="grid grid-cols-2 gap-3 mb-6">
-            <div class="card p-4">
-                <p class="text-[9px] font-bold uppercase tracking-wider opacity-50 mb-1 brand-font">목표 기준가</p>
-                <h2 class="text-xl font-black mono" id="total-krw">₩ 0</h2>
-                <p class="text-[10px] font-bold mono mt-1" id="total-krw-diff">-</p>
-            </div>
-            <div class="card p-4">
-                <p class="text-[9px] font-bold uppercase tracking-wider opacity-50 mb-1 brand-font">USDT 환산</p>
-                <h2 class="text-xl font-black mono text-sky-500" id="total-usdt">$ 0</h2>
-                <p class="text-[10px] font-bold mono mt-1 opacity-60" id="total-usdt-diff">-</p>
-            </div>
+            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 mb-1 brand-font">목표 기준가</p><h2 class="text-xl font-black mono" id="total-krw">₩ 0</h2><p class="text-[10px] font-bold mono mt-1" id="total-krw-diff">-</p></div>
+            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 mb-1 brand-font">USDT 환산</p><h2 class="text-xl font-black mono text-sky-500" id="total-usdt">$ 0</h2><p class="text-[10px] font-bold mono mt-1 opacity-60" id="total-usdt-diff">-</p></div>
         </div>
-        
-        <!-- Progress Section -->
         <div class="card p-5 mb-6">
             <div class="flex justify-between items-start mb-4">
-                <div>
-                    <p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font">현재 자산 입력</p>
-                    <div class="relative mt-2">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50 mono font-bold">₩</span>
-                        <input 
-                            type="text" 
-                            id="current-krw-input" 
-                            class="w-full rounded-xl py-3 pl-8 pr-4 text-xl font-black mono"
-                            placeholder="0"
-                            inputmode="numeric"
-                        >
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font">달성률</p>
-                    <h3 class="text-3xl font-black mono text-emerald-500 mt-1" id="mission-percent">0.00%</h3>
-                </div>
+                <div><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font">현재 자산 입력</p><div class="relative mt-2"><span class="absolute left-3 top-1/2 -translate-y-1/2 opacity-50 mono font-bold">₩</span><input type="text" id="current-krw-input" class="w-full rounded-xl py-3 pl-8 pr-4 text-xl font-black mono" placeholder="0" inputmode="numeric"></div></div>
+                <div class="text-right"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font">달성률</p><h3 class="text-3xl font-black mono text-emerald-500 mt-1" id="mission-percent">0.00%</h3></div>
             </div>
-            
             <div class="flex gap-2 mb-4">
                 <button class="flex-1 py-2 rounded-lg text-[10px] font-bold bg-sky-50 text-sky-600 active:bg-sky-100" onclick="addCash(1000000)">+100만</button>
                 <button class="flex-1 py-2 rounded-lg text-[10px] font-bold bg-sky-50 text-sky-600 active:bg-sky-100" onclick="addCash(10000000)">+1천만</button>
                 <button class="px-3 py-2 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-500 active:bg-rose-100" onclick="clearInput()">초기화</button>
             </div>
-            
-            <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-emerald-400 to-sky-500 progress-fill" id="mission-bar" style="width: 0%"></div>
-            </div>
-            <div class="flex justify-between mt-2">
-                <p class="text-[10px] font-bold opacity-50" id="mission-info">-</p>
-                <p class="text-[10px] font-bold mono" id="mission-remain">₩ 0</p>
-            </div>
+            <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-emerald-400 to-sky-500 progress-fill" id="mission-bar" style="width:0%"></div></div>
+            <div class="flex justify-between mt-2"><p class="text-[10px] font-bold opacity-50" id="mission-info">-</p><p class="text-[10px] font-bold mono" id="mission-remain">₩ 0</p></div>
         </div>
-        
-        <!-- Market Tickers -->
-        <h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">sensors</span> Market Tickers
-        </h3>
+        <h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font flex items-center gap-2"><span class="material-symbols-outlined text-sm">sensors</span> Market Tickers</h3>
         <div class="grid grid-cols-2 gap-3 mb-6">
-            <div class="card p-4">
-                <p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font mb-1">Bitcoin</p>
-                <p class="text-lg font-black mono" id="btc-price">₩ 0</p>
-                <p class="text-[10px] font-bold mono mt-1" id="btc-change">-</p>
-            </div>
-            <div class="card p-4">
-                <p class="text-[9px] font-bold uppercase tracking-wider text-amber-500 brand-font mb-1">PAX Gold</p>
-                <p class="text-lg font-black mono text-amber-500" id="xaut-price">₩ 0</p>
-                <p class="text-[10px] font-bold mono mt-1" id="xaut-change">-</p>
-            </div>
+            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider opacity-50 brand-font mb-1">Bitcoin</p><p class="text-lg font-black mono" id="btc-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="btc-change">-</p></div>
+            <div class="card p-4"><p class="text-[9px] font-bold uppercase tracking-wider text-amber-500 brand-font mb-1">PAX Gold</p><p class="text-lg font-black mono text-amber-500" id="xaut-price">₩ 0</p><p class="text-[10px] font-bold mono mt-1" id="xaut-change">-</p></div>
         </div>
-        
         <div class="grid grid-cols-3 gap-3 mb-6">
-            <div class="card p-3 text-center">
-                <p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">김프</p>
-                <p class="text-sm font-black mono text-emerald-500" id="kimp-value">0.00%</p>
-            </div>
-            <div class="card p-3 text-center">
-                <p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USD/KRW</p>
-                <p class="text-sm font-black mono" id="usd-rate">₩ 0</p>
-            </div>
-            <div class="card p-3 text-center">
-                <p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USDT</p>
-                <p class="text-sm font-black mono text-sky-500" id="usdt-rate">₩ 0</p>
-            </div>
+            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">김프</p><p class="text-sm font-black mono text-emerald-500" id="kimp-value">0.00%</p></div>
+            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USD/KRW</p><p class="text-sm font-black mono" id="usd-rate">₩ 0</p></div>
+            <div class="card p-3 text-center"><p class="text-[8px] font-bold uppercase tracking-wider opacity-50 brand-font">USDT</p><p class="text-sm font-black mono text-sky-500" id="usdt-rate">₩ 0</p></div>
         </div>
-        
-        <!-- Mini Chart -->
-        <div class="card p-4">
-            <h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font">달성률 추이</h3>
-            <div class="relative h-[180px] w-full">
-                <canvas id="assetChart"></canvas>
-            </div>
-        </div>
+        <div class="card p-4"><h3 class="text-xs font-bold uppercase tracking-wider opacity-50 mb-3 brand-font">달성률 추이</h3><div class="relative h-[180px] w-full"><canvas id="assetChart"></canvas></div></div>
     </div>
-
-    <!-- ==================== ROADMAP SECTION ==================== -->
+    <!-- ROADMAP -->
     <div class="section" id="section-roadmap">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold brand-font">~2030 로드맵</h2>
-            <button class="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-sky-50 text-sky-600" id="edit-btn">수정</button>
-        </div>
-        
-        <div class="card overflow-hidden mb-6">
-            <table class="w-full text-left">
-                <thead>
-                    <tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100">
-                        <th class="p-4">Year</th>
-                        <th class="p-4">Allocation</th>
-                        <th class="p-4 text-right">Target</th>
-                    </tr>
-                </thead>
-                <tbody id="roadmap-body" class="divide-y divide-gray-50"></tbody>
-            </table>
-        </div>
-        
-        <!-- Simulator -->
+        <div class="flex justify-between items-center mb-4"><h2 class="text-lg font-bold brand-font">~2030 로드맵</h2><button class="px-3 py-1.5 text-[10px] font-bold rounded-lg bg-sky-50 text-sky-600" id="edit-btn">수정</button></div>
+        <div class="card overflow-hidden mb-6"><table class="w-full text-left"><thead><tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100"><th class="p-4">Year</th><th class="p-4">Allocation</th><th class="p-4 text-right">Target</th></tr></thead><tbody id="roadmap-body" class="divide-y divide-gray-50"></tbody></table></div>
         <h3 class="text-sm font-bold brand-font mb-3">자산 시뮬레이터</h3>
         <div class="card p-4">
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="text-[9px] font-bold uppercase opacity-50 mb-1 block">BTC 수량</label>
-                    <input type="number" step="0.01" id="calc-btc" class="w-full rounded-lg p-2 text-sm mono font-bold" placeholder="0">
-                </div>
-                <div>
-                    <label class="text-[9px] font-bold uppercase opacity-50 mb-1 block">XAUT 수량</label>
-                    <input type="number" step="0.01" id="calc-xaut" class="w-full rounded-lg p-2 text-sm mono font-bold" placeholder="0">
-                </div>
-            </div>
-            <div class="flex justify-between items-center pt-3 border-t border-gray-100">
-                <span class="text-sm font-bold mono" id="calc-krw">₩ 0</span>
-                <span class="text-sm font-bold mono text-sky-500" id="calc-usdt">$ 0</span>
-            </div>
+            <div class="grid grid-cols-2 gap-4 mb-4"><div><label class="text-[9px] font-bold uppercase opacity-50 mb-1 block">BTC 수량</label><input type="number" step="0.01" id="calc-btc" class="w-full rounded-lg p-2 text-sm mono font-bold" placeholder="0"></div><div><label class="text-[9px] font-bold uppercase opacity-50 mb-1 block">XAUT 수량</label><input type="number" step="0.01" id="calc-xaut" class="w-full rounded-lg p-2 text-sm mono font-bold" placeholder="0"></div></div>
+            <div class="flex justify-between items-center pt-3 border-t border-gray-100"><span class="text-sm font-bold mono" id="calc-krw">₩ 0</span><span class="text-sm font-bold mono text-sky-500" id="calc-usdt">$ 0</span></div>
         </div>
     </div>
-
-    <!-- ==================== HISTORY SECTION ==================== -->
+    <!-- HISTORY -->
     <div class="section" id="section-history">
-        <!-- Year Navigation -->
-        <div class="flex justify-center items-center gap-6 mb-4">
-            <span id="prev-year-btn" class="nav-arrow disabled brand-font">&lt;</span>
-            <h2 class="text-2xl font-black brand-font w-20 text-center" id="display-year">2026</h2>
-            <span id="next-year-btn" class="nav-arrow active brand-font">&gt;</span>
-        </div>
-        
-        <div class="flex gap-2 mb-4">
-            <button id="add-past-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-sky-50 text-sky-600 active:bg-sky-100">+ 과거 기록</button>
-            <button id="delete-selected-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-500 active:bg-rose-100">선택 삭제</button>
-        </div>
-        
-        <div class="card overflow-hidden">
-            <div class="scrollable-table">
-                <table class="w-full text-left">
-                    <thead class="sticky top-0 bg-white z-10">
-                        <tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100">
-                            <th class="p-3 w-8"><input type="checkbox" id="select-all-logs" class="w-4 h-4 rounded"></th>
-                            <th class="p-3">Time</th>
-                            <th class="p-3">달성률</th>
-                            <th class="p-3 text-right">순자산</th>
-                        </tr>
-                    </thead>
-                    <tbody id="history-body" class="divide-y divide-gray-50"></tbody>
-                </table>
-            </div>
-        </div>
+        <div class="flex justify-center items-center gap-6 mb-4"><span id="prev-year-btn" class="nav-arrow disabled brand-font">&lt;</span><h2 class="text-2xl font-black brand-font w-20 text-center" id="display-year">2026</h2><span id="next-year-btn" class="nav-arrow active brand-font">&gt;</span></div>
+        <div class="flex gap-2 mb-4"><button id="add-past-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-sky-50 text-sky-600 active:bg-sky-100">+ 과거 기록</button><button id="delete-selected-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-500 active:bg-rose-100">선택 삭제</button></div>
+        <div class="card overflow-hidden"><div class="scrollable-table"><table class="w-full text-left"><thead class="sticky top-0 bg-white z-10"><tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100"><th class="p-3 w-8"><input type="checkbox" id="select-all-logs" class="w-4 h-4 rounded"></th><th class="p-3">Time</th><th class="p-3">달성률</th><th class="p-3 text-right">순자산</th></tr></thead><tbody id="history-body" class="divide-y divide-gray-50"></tbody></table></div></div>
     </div>
 </div>
-
-<!-- Past Record Modal -->
+<!-- MODAL -->
 <div id="past-record-modal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
     <div class="modal-overlay absolute w-full h-full bg-black/40 backdrop-blur-sm"></div>
     <div class="modal-container bg-white w-11/12 max-w-sm mx-auto rounded-2xl shadow-2xl z-50 transform scale-95 transition-all duration-300">
         <div class="p-6">
-            <div class="flex justify-between items-center mb-5">
-                <h3 class="text-lg font-bold brand-font">과거 기록 추가</h3>
-                <button class="modal-close material-symbols-outlined text-gray-400 active:text-gray-600">close</button>
-            </div>
+            <div class="flex justify-between items-center mb-5"><h3 class="text-lg font-bold brand-font">과거 기록 추가</h3><button class="modal-close material-symbols-outlined text-gray-400 active:text-gray-600">close</button></div>
             <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase opacity-50 mb-1">날짜</label>
-                        <input type="text" id="past-date" class="w-full rounded-xl p-3 text-sm mono" placeholder="2026-01-01" maxlength="10">
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold uppercase opacity-50 mb-1">시간</label>
-                        <input type="text" id="past-time" class="w-full rounded-xl p-3 text-sm mono" placeholder="HH:MM" maxlength="5">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold uppercase opacity-50 mb-1">당시 자산 (KRW)</label>
-                    <input type="text" id="past-krw" class="w-full rounded-xl p-3 text-sm mono font-bold" placeholder="100,000,000" inputmode="numeric">
-                </div>
-                <button id="save-past-btn" class="w-full py-3.5 bg-sky-500 text-white rounded-xl font-bold text-sm active:bg-sky-600">
-                    기록 저장
-                </button>
+                <div class="grid grid-cols-2 gap-3"><div><label class="block text-[10px] font-bold uppercase opacity-50 mb-1">날짜</label><input type="text" id="past-date" class="w-full rounded-xl p-3 text-sm mono" placeholder="2026-01-01" maxlength="10"></div><div><label class="block text-[10px] font-bold uppercase opacity-50 mb-1">시간</label><input type="text" id="past-time" class="w-full rounded-xl p-3 text-sm mono" placeholder="HH:MM" maxlength="5"></div></div>
+                <div><label class="block text-[10px] font-bold uppercase opacity-50 mb-1">당시 자산 (KRW)</label><input type="text" id="past-krw" class="w-full rounded-xl p-3 text-sm mono font-bold" placeholder="100,000,000" inputmode="numeric"></div>
+                <button id="save-past-btn" class="w-full py-3.5 bg-sky-500 text-white rounded-xl font-bold text-sm active:bg-sky-600">기록 저장</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-// ==================== TELEGRAM WEBAPP INIT ====================
-const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+// ==================== TELEGRAM INIT ====================
+const tg = window.Telegram?.WebApp;
+const isTelegram = !!tg;
 
-// Theme
-document.documentElement.style.setProperty('--tg-viewport-height', `${tg.viewportHeight}px`);
-tg.onEvent('viewportChanged', () => {
+if (isTelegram) {
+    tg.ready(); tg.expand();
     document.documentElement.style.setProperty('--tg-viewport-height', `${tg.viewportHeight}px`);
-});
-
-// User info
-const user = tg.initDataUnsafe?.user;
-if (user) {
-    document.getElementById('user-name').innerText = user.first_name || '';
+    tg.onEvent('viewportChanged', () => document.documentElement.style.setProperty('--tg-viewport-height', `${tg.viewportHeight}px`));
+    const user = tg.initDataUnsafe?.user;
+    if (user) document.getElementById('user-name').innerText = user.first_name || '';
+    tg.MainButton.setText('📸 스냅샷 저장');
+    tg.MainButton.onClick(() => saveSnapshot());
+    tg.MainButton.show();
+} else {
+    console.log('⚠️ 브라우저 모드 (localStorage 사용)');
 }
 
-// MainButton - 스냅샷 저장
-tg.MainButton.setText('📸 스냅샷 저장');
-tg.MainButton.onClick(() => saveSnapshot());
+function haptic(t='light') { if (isTelegram && tg.HapticFeedback) tg.HapticFeedback.impactOccurred(t); }
+function showAlert(m) { isTelegram ? tg.showAlert(m) : alert(m); }
+function showConfirm(m, cb) { isTelegram ? tg.showConfirm(m, cb) : cb(confirm(m)); }
 
-// Haptic feedback helper
-function haptic(type = 'light') {
-    if (tg.HapticFeedback) {
-        tg.HapticFeedback.impactOccurred(type);
-    }
+// ==================== STORAGE LAYER ====================
+// 텔레그램: CloudStorage / 브라우저: localStorage 자동 전환
+// 청크 구조: ft_meta → {chunks:N}, ft_c_0~N → [records...], ft_rm → roadmap
+const CHUNK_SIZE = 25;
+
+function sGet(key) {
+    return new Promise((res, rej) => {
+        if (isTelegram && tg.CloudStorage) tg.CloudStorage.getItem(key, (e,v) => e ? rej(e) : res(v||null));
+        else res(localStorage.getItem(key));
+    });
+}
+function sSet(key, val) {
+    return new Promise((res, rej) => {
+        if (isTelegram && tg.CloudStorage) tg.CloudStorage.setItem(key, val, (e,ok) => e ? rej(e) : res(ok));
+        else { localStorage.setItem(key, val); res(true); }
+    });
+}
+function sGetItems(keys) {
+    return new Promise((res, rej) => {
+        if (isTelegram && tg.CloudStorage) tg.CloudStorage.getItems(keys, (e,r) => e ? rej(e) : res(r));
+        else { const r={}; keys.forEach(k => r[k]=localStorage.getItem(k)); res(r); }
+    });
+}
+function sRemoveItems(keys) {
+    return new Promise((res, rej) => {
+        if (isTelegram && tg.CloudStorage) tg.CloudStorage.removeItems(keys, (e,ok) => e ? rej(e) : res(ok));
+        else { keys.forEach(k => localStorage.removeItem(k)); res(true); }
+    });
 }
 
-// ==================== CONFIG ====================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzmlWwtrc-svURyEg8t6fON5UcXy4oCd5RLJ8rFgt3OR6DPGrtQp8aMkVwETRFCDgR3/exec";
-const DAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+// ==================== SNAPSHOT STORAGE ====================
+async function loadAllSnapshots() {
+    setSyncState(true);
+    try {
+        const metaRaw = await sGet('ft_meta');
+        if (!metaRaw) { historyLog = []; updateHistory(); return; }
+        const meta = JSON.parse(metaRaw);
+        const n = meta.chunks || 0;
+        if (n === 0) { historyLog = []; updateHistory(); return; }
+        const keys = []; for (let i=0;i<n;i++) keys.push(`ft_c_${i}`);
+        const results = await sGetItems(keys);
+        historyLog = [];
+        for (let i=0;i<n;i++) { const raw=results[`ft_c_${i}`]; if(raw) historyLog.push(...JSON.parse(raw)); }
+        updateHistory();
+    } catch(e) { console.error("Load Error:",e); showAlert("데이터 불러오기 실패"); }
+    finally { setSyncState(false); }
+}
+
+async function saveAllSnapshots() {
+    setSyncState(true);
+    try {
+        const oldMetaRaw = await sGet('ft_meta');
+        const oldN = oldMetaRaw ? JSON.parse(oldMetaRaw).chunks||0 : 0;
+        const newN = Math.ceil(historyLog.length/CHUNK_SIZE)||0;
+        for (let i=0;i<newN;i++) await sSet(`ft_c_${i}`, JSON.stringify(historyLog.slice(i*CHUNK_SIZE,(i+1)*CHUNK_SIZE)));
+        if (oldN > newN) { const del=[]; for(let i=newN;i<oldN;i++) del.push(`ft_c_${i}`); if(del.length) await sRemoveItems(del); }
+        await sSet('ft_meta', JSON.stringify({chunks:newN}));
+    } catch(e) { console.error("Save Error:",e); showAlert("저장 실패"); }
+    finally { setSyncState(false); }
+}
+
+async function appendSnapshot(record) {
+    setSyncState(true);
+    try {
+        const metaRaw = await sGet('ft_meta');
+        const meta = metaRaw ? JSON.parse(metaRaw) : {chunks:0};
+        let n = meta.chunks||0;
+        let lastChunk = [];
+        if (n > 0) { const raw = await sGet(`ft_c_${n-1}`); if(raw) lastChunk = JSON.parse(raw); }
+        if (lastChunk.length < CHUNK_SIZE && n > 0) {
+            lastChunk.push(record);
+            await sSet(`ft_c_${n-1}`, JSON.stringify(lastChunk));
+        } else {
+            await sSet(`ft_c_${n}`, JSON.stringify([record]));
+            n++;
+            await sSet('ft_meta', JSON.stringify({chunks:n}));
+        }
+        historyLog.push(record);
+        updateHistory();
+        haptic('success');
+    } catch(e) { console.error("Append Error:",e); showAlert("저장 실패"); }
+    finally { setSyncState(false); }
+}
+
+// ==================== ROADMAP STORAGE ====================
+async function loadRoadmap() {
+    try { const raw = await sGet('ft_rm'); if(raw) { roadmap=JSON.parse(raw); roadmap=roadmap.filter(r=>r.year>=2026); } } catch(e) { console.error("Roadmap load:",e); }
+}
+async function saveRoadmap() {
+    try { await sSet('ft_rm', JSON.stringify(roadmap)); } catch(e) { console.error("Roadmap save:",e); }
+}
 
 // ==================== STATE ====================
-let roadmap = JSON.parse(localStorage.getItem('fortress_roadmap_v2')) || [
-    { year: 2026, btc: 0.25, xaut: 8.04 },
-    { year: 2027, btc: 0.45, xaut: 14.47 },
-    { year: 2028, btc: 0.65, xaut: 20.90 },
-    { year: 2029, btc: 0.85, xaut: 27.33 },
-    { year: 2030, btc: 1.00, xaut: 32.15 }
-];
-roadmap = roadmap.filter(r => r.year >= 2026);
-
+const DAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+let roadmap = [{year:2026,btc:0.25,xaut:8.04},{year:2027,btc:0.45,xaut:14.47},{year:2028,btc:0.65,xaut:20.90},{year:2029,btc:0.85,xaut:27.33},{year:2030,btc:1.00,xaut:32.15}];
 let historyLog = [];
-let state = { btc: null, bC: null, xaut: null, xC: null, usdt: null, uC: null, usd: null, bPrev: 0, xPrev: 0, uPrev: 0 };
-let lastP = { btc: 0, xaut: 0, usdt: 0, usd: 0 };
-let isEditing = false;
-let assetChart = null;
-let selectedYear = new Date().getFullYear();
-if (selectedYear < 2026) selectedYear = 2026;
+let state = {btc:null,bC:null,xaut:null,xC:null,usdt:null,uC:null,usd:null,bPrev:0,xPrev:0,uPrev:0};
+let lastP = {btc:0,xaut:0,usdt:0,usd:0};
+let isEditing = false, assetChart = null;
+let selectedYear = Math.max(new Date().getFullYear(), 2026);
 
-// ==================== HELPERS ====================
-function formatWithCommas(n) { 
-    if (!n) return "0";
-    let num = typeof n === 'string' ? parseFloat(n.replace(/,/g, '')) : n;
-    if (isNaN(num)) return "0";
-    return num.toLocaleString(); 
-}
+function formatWithCommas(n) { if(!n)return"0"; let num=typeof n==='string'?parseFloat(n.replace(/,/g,'')):n; return isNaN(num)?"0":num.toLocaleString(); }
 
-function formatTimeFromCloud(rawTime) {
-    if (typeof rawTime === 'string' && rawTime.includes('T')) {
-        const d = new Date(rawTime);
-        return String(d.getHours()).padStart(2, '0') + ":" + String(d.getMinutes()).padStart(2, '0');
-    }
-    return rawTime;
-}
-
-// ==================== TAB NAVIGATION ====================
+// ==================== TABS ====================
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         haptic('light');
-        const tab = btn.dataset.tab;
-        
-        // Update buttons
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
-        
-        // Update sections
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.getElementById(`section-${tab}`).classList.add('active');
-        
-        // Show MainButton only on dashboard
-        if (tab === 'dashboard') {
-            tg.MainButton.show();
-        } else {
-            tg.MainButton.hide();
-        }
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(`section-${btn.dataset.tab}`).classList.add('active');
+        if(isTelegram){if(btn.dataset.tab==='dashboard')tg.MainButton.show();else tg.MainButton.hide();}
     });
 });
-
-// Show MainButton initially
-tg.MainButton.show();
 
 // ==================== SYNC ====================
 const syncIcon = document.getElementById('sync-icon');
+function setSyncState(s) { syncIcon.innerText=s?'sync':'cloud_done'; s?syncIcon.classList.add('syncing'):syncIcon.classList.remove('syncing'); }
 
-function setSyncState(isSyncing) {
-    if (isSyncing) {
-        syncIcon.innerText = 'sync';
-        syncIcon.classList.add('syncing');
-    } else {
-        syncIcon.innerText = 'cloud_done';
-        syncIcon.classList.remove('syncing');
-    }
+// ==================== INPUT ====================
+const krwInput=document.getElementById('current-krw-input'), pastKrwInput=document.getElementById('past-krw'), pastTimeInput=document.getElementById('past-time'), pastDateInput=document.getElementById('past-date');
+[krwInput,pastKrwInput].forEach(inp=>{inp.addEventListener('input',function(){let c=this.selectionStart,l=this.value.length,v=this.value.replace(/\D/g,"");this.value=v.replace(/\B(?=(\d{3})+(?!\d))/g,",");this.setSelectionRange(c+(this.value.length-l),c+(this.value.length-l));if(inp===krwInput)render();});});
+pastTimeInput.addEventListener('input',function(){let v=this.value.replace(/\D/g,'');this.value=v.length>=2?v.substring(0,2)+':'+v.substring(2,4):v;});
+pastDateInput.addEventListener('input',function(){let v=this.value.replace(/\D/g,'');if(v.length>4)v=v.slice(0,4)+'-'+v.slice(4);if(v.length>7)v=v.slice(0,7)+'-'+v.slice(7);this.value=v;});
+function addCash(a){haptic('light');let c=parseInt(krwInput.value.replace(/,/g,""))||0;krwInput.value=formatWithCommas(c+a);render();}
+function clearInput(){haptic('light');krwInput.value='';updateMissionGauge(0);}
+
+// ==================== API ====================
+async function fetchTickers(){try{const r=await fetch('https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-XAUT,KRW-USDT');const d=await r.json();const b=d.find(x=>x.market==='KRW-BTC'),x=d.find(x=>x.market==='KRW-XAUT'),u=d.find(x=>x.market==='KRW-USDT');if(b&&x&&u){state.btc=b.trade_price;state.bC=b.signed_change_rate;state.bPrev=b.prev_closing_price;state.xaut=x.trade_price;state.xC=x.signed_change_rate;state.xPrev=x.prev_closing_price;state.usdt=u.trade_price;state.uC=u.signed_change_rate;state.uPrev=u.prev_closing_price;document.getElementById('status-dot').className="w-2 h-2 bg-emerald-500 rounded-full blink";render();}}catch(e){document.getElementById('status-dot').className="w-2 h-2 bg-rose-500 rounded-full";}}
+async function fetchForex(){try{const r=await fetch('https://api.exchangerate-api.com/v4/latest/USD');const d=await r.json();if(d?.rates?.KRW)state.usd=d.rates.KRW;render();}catch(e){}}
+
+// ==================== RENDER ====================
+function render(){
+    updateUI('btc-price',state.btc,lastP.btc,"₩ ");updateChangeUI('btc-change',state.bC);
+    updateUI('xaut-price',state.xaut,lastP.xaut,"₩ ");updateChangeUI('xaut-change',state.xC);
+    updateUI('usdt-rate',state.usdt,lastP.usdt,"₩ ");updateUI('usd-rate',state.usd,lastP.usd,"₩ ");
+    if(state.usdt&&state.usd){const k=((state.usdt/state.usd)-1)*100;const el=document.getElementById('kimp-value');el.innerText=`${k>0?'+':''}${k.toFixed(2)}%`;el.className=`text-sm font-black mono ${k>0?'text-emerald-500':'text-blue-500'}`;}
+    if(state.btc&&state.xaut){const yr=new Date().getFullYear();let m=roadmap.find(r=>r.year===yr);if(!m){ensureRoadmapCoverage(yr);m=roadmap.find(r=>r.year===yr);}
+        const tv=(state.btc*m.btc)+(state.xaut*m.xaut);const ptv=(state.bPrev*m.btc)+(state.xPrev*m.xaut);const diff=tv-ptv;
+        document.getElementById('total-krw').innerText="₩ "+Math.round(tv).toLocaleString();
+        const de=document.getElementById('total-krw-diff');de.innerText=(diff>=0?'▲ ':'▼ ')+Math.abs(Math.round(diff)).toLocaleString();de.className=`text-[10px] font-bold mono ${diff>=0?'text-emerald-500':'text-rose-500'}`;
+        document.getElementById('total-usdt').innerText="$ "+Math.round(tv/(state.usdt||1)).toLocaleString();
+        document.getElementById('mission-info').innerText=`${m.btc} BTC + ${m.xaut} XAUT`;updateMissionGauge(tv);}
+    lastP={...state};runCalc();if(!isEditing)updateRoadmap();
 }
-
-async function loadFromCloud() {
-    setSyncState(true);
-    try {
-        const res = await fetch(GAS_URL);
-        const data = await res.json();
-        historyLog = data;
-        updateHistory();
-    } catch (e) {
-        console.error("Cloud Load Error:", e);
-        tg.showAlert("클라우드 데이터를 불러오는데 실패했습니다.");
-    } finally {
-        setSyncState(false);
-    }
-}
-
-async function saveToCloud(record) {
-    setSyncState(true);
-    try {
-        await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: "append", data: record })
-        });
-        await loadFromCloud();
-        haptic('success');
-    } catch (e) {
-        console.error("Cloud Save Error:", e);
-        tg.showAlert("클라우드 저장 실패");
-    } finally {
-        setSyncState(false);
-    }
-}
-
-async function overwriteCloud(allRecords) {
-    setSyncState(true);
-    try {
-        await fetch(GAS_URL, {
-            method: 'POST',
-            mode: 'no-cors', 
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: "replace", data: allRecords })
-        });
-        await loadFromCloud();
-    } catch (e) {
-        console.error("Cloud Overwrite Error:", e);
-        tg.showAlert("클라우드 삭제 동기화 실패");
-    } finally {
-        setSyncState(false);
-    }
-}
-
-// ==================== INPUT HANDLING ====================
-const krwInput = document.getElementById('current-krw-input');
-const pastKrwInput = document.getElementById('past-krw');
-const pastTimeInput = document.getElementById('past-time');
-const pastDateInput = document.getElementById('past-date');
-
-[krwInput, pastKrwInput].forEach(inp => {
-    inp.addEventListener('input', function() { 
-        let cur = this.selectionStart, len = this.value.length; 
-        let val = this.value.replace(/\D/g, "");
-        this.value = val.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        this.setSelectionRange(cur + (this.value.length - len), cur + (this.value.length - len)); 
-        if (inp === krwInput) render(); 
-    });
-});
-
-pastTimeInput.addEventListener('input', function() {
-    let v = this.value.replace(/\D/g, '');
-    if (v.length >= 2) {
-        this.value = v.substring(0, 2) + ':' + v.substring(2, 4);
-    } else {
-        this.value = v;
-    }
-});
-
-pastDateInput.addEventListener('input', function() {
-    let v = this.value.replace(/\D/g, '');
-    if (v.length > 4) v = v.slice(0, 4) + '-' + v.slice(4);
-    if (v.length > 7) v = v.slice(0, 7) + '-' + v.slice(7);
-    this.value = v;
-});
-
-function addCash(amount) {
-    haptic('light');
-    let current = parseInt(krwInput.value.replace(/,/g, "")) || 0;
-    krwInput.value = formatWithCommas(current + amount);
-    render();
-}
-
-function clearInput() {
-    haptic('light');
-    krwInput.value = '';
-    updateMissionGauge(0);
-}
-
-// ==================== API FETCHING ====================
-async function fetchTickers() {
-    try {
-        const res = await fetch('https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-XAUT,KRW-USDT');
-        const data = await res.json();
-        const b = data.find(d => d.market === 'KRW-BTC');
-        const x = data.find(d => d.market === 'KRW-XAUT');
-        const u = data.find(d => d.market === 'KRW-USDT');
-        
-        if (b && x && u) {
-            state.btc = b.trade_price; state.bC = b.signed_change_rate; state.bPrev = b.prev_closing_price;
-            state.xaut = x.trade_price; state.xC = x.signed_change_rate; state.xPrev = x.prev_closing_price;
-            state.usdt = u.trade_price; state.uC = u.signed_change_rate; state.uPrev = u.prev_closing_price;
-            document.getElementById('status-dot').className = "w-2 h-2 bg-emerald-500 rounded-full blink";
-            render();
-        }
-    } catch (e) { 
-        document.getElementById('status-dot').className = "w-2 h-2 bg-rose-500 rounded-full"; 
-    }
-}
-
-async function fetchForex() {
-    try {
-        const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-        const data = await res.json();
-        if (data?.rates?.KRW) {
-            state.usd = data.rates.KRW;
-        }
-        render();
-    } catch (e) { console.error("Forex API Error:", e); }
-}
-
-// ==================== RENDERING ====================
-function render() {
-    // Prices
-    updateUI('btc-price', state.btc, lastP.btc, "₩ "); 
-    updateChangeUI('btc-change', state.bC);
-    updateUI('xaut-price', state.xaut, lastP.xaut, "₩ "); 
-    updateChangeUI('xaut-change', state.xC);
-    updateUI('usdt-rate', state.usdt, lastP.usdt, "₩ ");
-    updateUI('usd-rate', state.usd, lastP.usd, "₩ ");
-
-    // Kimchi premium
-    if (state.usdt && state.usd) {
-        const kimp = ((state.usdt / state.usd) - 1) * 100;
-        const kimpEl = document.getElementById('kimp-value');
-        kimpEl.innerText = `${kimp > 0 ? '+' : ''}${kimp.toFixed(2)}%`;
-        kimpEl.className = `text-sm font-black mono ${kimp > 0 ? 'text-emerald-500' : 'text-blue-500'}`;
-    }
-
-    // Target calculations
-    if (state.btc && state.xaut) {
-        const currentRealYear = new Date().getFullYear();
-        let mission = roadmap.find(r => r.year === currentRealYear);
-        if (!mission) {
-            ensureRoadmapCoverage(currentRealYear);
-            mission = roadmap.find(r => r.year === currentRealYear);
-        }
-
-        const targetValue = (state.btc * mission.btc) + (state.xaut * mission.xaut);
-        const prevTargetKRW = (state.bPrev * mission.btc) + (state.xPrev * mission.xaut);
-        const diffKRW = targetValue - prevTargetKRW;
-        
-        document.getElementById('total-krw').innerText = "₩ " + Math.round(targetValue).toLocaleString();
-        const diffEl = document.getElementById('total-krw-diff');
-        diffEl.innerText = (diffKRW >= 0 ? '▲ ' : '▼ ') + Math.abs(Math.round(diffKRW)).toLocaleString();
-        diffEl.className = `text-[10px] font-bold mono ${diffKRW >= 0 ? 'text-emerald-500' : 'text-rose-500'}`;
-        
-        document.getElementById('total-usdt').innerText = "$ " + Math.round(targetValue / (state.usdt || 1)).toLocaleString();
-        document.getElementById('mission-info').innerText = `${mission.btc} BTC + ${mission.xaut} XAUT`;
-        updateMissionGauge(targetValue);
-    }
-    
-    lastP = { ...state }; 
-    runCalc(); 
-    if (!isEditing) updateRoadmap();
-}
-
-function updateMissionGauge(targetValue) {
-    const rawVal = krwInput.value.replace(/,/g, "");
-    const currentKRW = parseFloat(rawVal) || 0;
-    const pct = (currentKRW / (targetValue || 1)) * 100;
-    
-    document.getElementById('mission-percent').innerText = pct.toFixed(2) + "%";
-    document.getElementById('mission-bar').style.width = Math.min(pct, 100) + "%";
-    document.getElementById('mission-remain').innerText = targetValue > currentKRW 
-        ? "₩ " + Math.round(targetValue - currentKRW).toLocaleString() 
-        : "✓ Goal!";
-}
-
-function updateUI(id, cur, last, prefix = "") { 
-    let el = document.getElementById(id); 
-    if (cur !== null) { 
-        el.innerText = prefix + cur.toLocaleString(); 
-        if (last !== 0 && cur !== last) { 
-            el.classList.add(cur > last ? 'price-up' : 'price-down'); 
-            setTimeout(() => el.classList.remove('price-up', 'price-down'), 600); 
-        } 
-    } 
-}
-
-function updateChangeUI(id, rate) { 
-    let el = document.getElementById(id); 
-    if (rate !== null) { 
-        const pct = (rate * 100).toFixed(2);
-        el.innerText = `${rate > 0 ? '+' : ''}${pct}%`; 
-        el.className = `text-[10px] font-bold mono px-2 py-0.5 rounded ${rate > 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`; 
-    } 
-}
-
-function runCalc() {
-    const b = parseFloat(document.getElementById('calc-btc').value) || 0;
-    const x = parseFloat(document.getElementById('calc-xaut').value) || 0;
-    if (state.btc && state.xaut) {
-        const sum = (b * state.btc) + (x * state.xaut);
-        document.getElementById('calc-krw').innerText = "₩ " + Math.round(sum).toLocaleString();
-        document.getElementById('calc-usdt').innerText = "$ " + Math.round(sum / (state.usdt || 1)).toLocaleString();
-    }
-}
+function updateMissionGauge(tv){const c=parseFloat(krwInput.value.replace(/,/g,""))||0;const p=(c/(tv||1))*100;document.getElementById('mission-percent').innerText=p.toFixed(2)+"%";document.getElementById('mission-bar').style.width=Math.min(p,100)+"%";document.getElementById('mission-remain').innerText=tv>c?"₩ "+Math.round(tv-c).toLocaleString():"✓ Goal!";}
+function updateUI(id,cur,last,pre=""){let el=document.getElementById(id);if(cur!==null){el.innerText=pre+cur.toLocaleString();if(last!==0&&cur!==last){el.classList.add(cur>last?'price-up':'price-down');setTimeout(()=>el.classList.remove('price-up','price-down'),600);}}}
+function updateChangeUI(id,rate){let el=document.getElementById(id);if(rate!==null){const p=(rate*100).toFixed(2);el.innerText=`${rate>0?'+':''}${p}%`;el.className=`text-[10px] font-bold mono px-2 py-0.5 rounded ${rate>0?'bg-emerald-50 text-emerald-600':'bg-blue-50 text-blue-600'}`;}}
+function runCalc(){const b=parseFloat(document.getElementById('calc-btc').value)||0;const x=parseFloat(document.getElementById('calc-xaut').value)||0;if(state.btc&&state.xaut){const s=(b*state.btc)+(x*state.xaut);document.getElementById('calc-krw').innerText="₩ "+Math.round(s).toLocaleString();document.getElementById('calc-usdt').innerText="$ "+Math.round(s/(state.usdt||1)).toLocaleString();}}
 
 // ==================== ROADMAP ====================
-function ensureRoadmapCoverage(targetYear) {
-    const maxYear = roadmap[roadmap.length - 1].year;
-    if (targetYear > maxYear) {
-        const lastEntry = roadmap[roadmap.length - 1];
-        for (let y = maxYear + 1; y <= targetYear; y++) {
-            roadmap.push({ year: y, btc: lastEntry.btc, xaut: lastEntry.xaut });
-        }
-        localStorage.setItem('fortress_roadmap_v2', JSON.stringify(roadmap));
-    }
-}
-
-function updateRoadmap() {
-    const tbody = document.getElementById('roadmap-body');
-    tbody.innerHTML = '';
-    const currentRealYear = new Date().getFullYear();
-    ensureRoadmapCoverage(currentRealYear + 4);
-
-    roadmap.forEach((r, i) => {
-        if (r.year < currentRealYear || r.year > currentRealYear + 4) return;
-
-        const active = r.year === currentRealYear;
-        const val = (state.btc * r.btc) + (state.xaut * r.xaut);
-        
-        const bC = isEditing 
-            ? `<input type="number" step="0.01" value="${r.btc}" class="w-14 rounded p-1 text-xs mono text-center" data-idx="${i}" data-type="btc">`
-            : `${r.btc} BTC`;
-        const xC = isEditing 
-            ? `<input type="number" step="0.01" value="${r.xaut}" class="w-14 rounded p-1 text-xs mono text-center text-amber-600" data-idx="${i}" data-type="xaut">`
-            : `${r.xaut} XAUT`;
-        
-        tbody.innerHTML += `
-        <tr class="${active ? 'bg-sky-50' : ''} transition-colors">
-            <td class="p-4 text-lg brand-font font-bold ${active ? 'text-sky-500' : 'opacity-50'}">${r.year}</td>
-            <td class="p-4 mono text-xs">
-                <div class="font-bold">${bC}</div>
-                <div class="mt-1 font-bold text-amber-500">${xC}</div>
-            </td>
-            <td class="p-4 text-right mono text-sm font-bold">₩ ${Math.round(val).toLocaleString()}</td>
-        </tr>`;
-    });
-    
-    if (isEditing) {
-        document.querySelectorAll('input[data-idx]').forEach(inp => {
-            inp.addEventListener('change', (e) => {
-                roadmap[e.target.dataset.idx][e.target.dataset.type] = parseFloat(e.target.value);
-            });
-        });
-    }
-}
-
-document.getElementById('edit-btn').onclick = () => { 
-    haptic('light');
-    isEditing = !isEditing; 
-    document.getElementById('edit-btn').innerText = isEditing ? "저장" : "수정"; 
-    if (!isEditing) { 
-        localStorage.setItem('fortress_roadmap_v2', JSON.stringify(roadmap)); 
-        render(); 
-    } else {
-        updateRoadmap();
-    }
-};
-
-document.getElementById('calc-btc').oninput = runCalc;
-document.getElementById('calc-xaut').oninput = runCalc;
+function ensureRoadmapCoverage(y){const mx=roadmap[roadmap.length-1].year;if(y>mx){const last=roadmap[roadmap.length-1];for(let i=mx+1;i<=y;i++)roadmap.push({year:i,btc:last.btc,xaut:last.xaut});saveRoadmap();}}
+function updateRoadmap(){const tb=document.getElementById('roadmap-body');tb.innerHTML='';const yr=new Date().getFullYear();ensureRoadmapCoverage(yr+4);
+    roadmap.forEach((r,i)=>{if(r.year<yr||r.year>yr+4)return;const a=r.year===yr;const v=(state.btc*r.btc)+(state.xaut*r.xaut);
+        const bC=isEditing?`<input type="number" step="0.01" value="${r.btc}" class="w-14 rounded p-1 text-xs mono text-center" data-idx="${i}" data-type="btc">`:`${r.btc} BTC`;
+        const xC=isEditing?`<input type="number" step="0.01" value="${r.xaut}" class="w-14 rounded p-1 text-xs mono text-center text-amber-600" data-idx="${i}" data-type="xaut">`:`${r.xaut} XAUT`;
+        tb.innerHTML+=`<tr class="${a?'bg-sky-50':''} transition-colors"><td class="p-4 text-lg brand-font font-bold ${a?'text-sky-500':'opacity-50'}">${r.year}</td><td class="p-4 mono text-xs"><div class="font-bold">${bC}</div><div class="mt-1 font-bold text-amber-500">${xC}</div></td><td class="p-4 text-right mono text-sm font-bold">₩ ${Math.round(v).toLocaleString()}</td></tr>`;});
+    if(isEditing)document.querySelectorAll('input[data-idx]').forEach(inp=>inp.addEventListener('change',e=>{roadmap[e.target.dataset.idx][e.target.dataset.type]=parseFloat(e.target.value);}));}
+document.getElementById('edit-btn').onclick=()=>{haptic('light');isEditing=!isEditing;document.getElementById('edit-btn').innerText=isEditing?"저장":"수정";if(!isEditing){saveRoadmap();render();}else updateRoadmap();};
+document.getElementById('calc-btc').oninput=runCalc;
+document.getElementById('calc-xaut').oninput=runCalc;
 
 // ==================== HISTORY ====================
-function sortLogs(logs) {
-    return logs.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
-}
+function sortLogs(l){return l.sort((a,b)=>a.date.localeCompare(b.date)||a.time.localeCompare(b.time));}
+function changeYear(o){const n=selectedYear+o;if(n<2026||n>2030)return;haptic('light');selectedYear=n;updateYearUI();updateChart();updateHistory();}
+function updateYearUI(){document.getElementById('display-year').innerText=selectedYear;document.getElementById('prev-year-btn').className=selectedYear<=2026?"nav-arrow disabled brand-font":"nav-arrow active brand-font";document.getElementById('next-year-btn').className=selectedYear>=2030?"nav-arrow disabled brand-font":"nav-arrow active brand-font";}
+document.getElementById('prev-year-btn').onclick=()=>changeYear(-1);
+document.getElementById('next-year-btn').onclick=()=>changeYear(1);
 
-function changeYear(offset) {
-    const nextY = selectedYear + offset;
-    if (nextY < 2026 || nextY > 2030) return;
-    haptic('light');
-    selectedYear = nextY;
-    updateYearUI();
-    updateChart();
-    updateHistory();
-}
+function updateHistory(){const tb=document.getElementById('history-body');tb.innerHTML='';const ys=selectedYear.toString();const sl=sortLogs([...historyLog]).filter(h=>h.date.includes(ys));const rl=[...sl].reverse();
+    document.getElementById('select-all-logs').checked=false;
+    rl.forEach(h=>{const idx=historyLog.findIndex(item=>item===h);
+        tb.innerHTML+=`<tr class="hover:bg-gray-50 transition-colors"><td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${idx}"></td><td class="p-3 mono text-[10px]"><div class="opacity-50">${h.date.split(' . ').slice(1,3).join('/')}</div><div class="font-bold">${h.time}</div></td><td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td><td class="p-3 text-right font-bold mono text-sm">₩ ${formatWithCommas(h.krw)}</td></tr>`;});
+    document.querySelectorAll('.log-item-checkbox').forEach(cb=>cb.addEventListener('change',()=>{const all=document.querySelectorAll('.log-item-checkbox');document.getElementById('select-all-logs').checked=all.length>0&&Array.from(all).every(c=>c.checked);}));
+    updateChart();}
 
-function updateYearUI() {
-    document.getElementById('display-year').innerText = selectedYear;
-    const prevBtn = document.getElementById('prev-year-btn');
-    const nextBtn = document.getElementById('next-year-btn');
-    prevBtn.className = selectedYear <= 2026 ? "nav-arrow disabled brand-font" : "nav-arrow active brand-font";
-    nextBtn.className = selectedYear >= 2030 ? "nav-arrow disabled brand-font" : "nav-arrow active brand-font";
-}
-
-document.getElementById('prev-year-btn').onclick = () => changeYear(-1);
-document.getElementById('next-year-btn').onclick = () => changeYear(1);
-
-function updateHistory() {
-    const tbody = document.getElementById('history-body');
-    tbody.innerHTML = '';
-    const yearStr = selectedYear.toString();
-    let sortedLogs = sortLogs([...historyLog]);
-    
-    const yearLogs = sortedLogs.filter(h => h.date.includes(yearStr));
-    const reversedLogs = [...yearLogs].reverse();
-
-    document.getElementById('select-all-logs').checked = false;
-
-    reversedLogs.forEach((h) => {
-        const originalIdx = historyLog.findIndex(item => item === h);
-        const displayTime = formatTimeFromCloud(h.time);
-        const displayKrw = formatWithCommas(h.krw);
-
-        tbody.innerHTML += `
-        <tr class="hover:bg-gray-50 transition-colors">
-            <td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${originalIdx}"></td>
-            <td class="p-3 mono text-[10px]">
-                <div class="opacity-50">${h.date.split(' . ').slice(1, 3).join('/')}</div>
-                <div class="font-bold">${displayTime}</div>
-            </td>
-            <td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td>
-            <td class="p-3 text-right font-bold mono text-sm">₩ ${displayKrw}</td>
-        </tr>`;
-    });
-
-    const checkboxes = document.querySelectorAll('.log-item-checkbox');
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(c => c.checked);
-            document.getElementById('select-all-logs').checked = allChecked;
-        });
-    });
-
-    updateChart();
-}
-
-document.getElementById('select-all-logs').onclick = (e) => {
-    document.querySelectorAll('.log-item-checkbox').forEach(c => c.checked = e.target.checked);
-};
-
-document.getElementById('delete-selected-btn').onclick = async () => {
-    const sel = document.querySelectorAll('.log-item-checkbox:checked');
-    if (!sel.length) return;
-
-    tg.showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`, async (confirmed) => {
-        if (confirmed) {
-            haptic('warning');
-            const idxsToDelete = [...sel].map(c => parseInt(c.dataset.idx)).sort((a, b) => b - a);
-            idxsToDelete.forEach(i => historyLog.splice(i, 1));
-            await overwriteCloud(historyLog);
-        }
-    });
-};
+document.getElementById('select-all-logs').onclick=e=>document.querySelectorAll('.log-item-checkbox').forEach(c=>c.checked=e.target.checked);
+document.getElementById('delete-selected-btn').onclick=async()=>{const sel=document.querySelectorAll('.log-item-checkbox:checked');if(!sel.length)return;
+    showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`,async ok=>{if(ok){haptic('warning');[...sel].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a).forEach(i=>historyLog.splice(i,1));await saveAllSnapshots();updateHistory();}});};
 
 // ==================== CHART ====================
-function updateChart() {
-    const ctx = document.getElementById('assetChart').getContext('2d');
-    const yearStr = selectedYear.toString();
-    
-    let chartData = historyLog.map(h => ({ ...h, pct: parseFloat(h.pct) }));
-    let sortedLogs = sortLogs([...chartData]);
-    const yearLogs = sortedLogs.filter(h => h.date.includes(yearStr));
-
-    const dailyBest = {};
-    yearLogs.forEach(log => {
-        const dateKey = log.date.split(' . ').slice(1, 3).join('.');
-        if (!dailyBest[dateKey] || log.pct > dailyBest[dateKey]) {
-            dailyBest[dateKey] = log.pct;
-        }
-    });
-
-    const labels = Object.keys(dailyBest);
-    const data = Object.values(dailyBest);
-
-    if (assetChart) {
-        assetChart.data.labels = labels;
-        assetChart.data.datasets[0].data = data;
-        assetChart.update();
-    } else {
-        assetChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Achievement %',
-                    data: data,
-                    borderColor: '#0ea5e9',
-                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#0ea5e9',
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { 
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: { label: (ctx) => ctx.parsed.y.toFixed(2) + '%' }
-                    }
-                },
-                scales: {
-                    y: { 
-                        beginAtZero: false,
-                        grid: { color: 'rgba(0,0,0,0.03)' },
-                        ticks: { font: { family: 'JetBrains Mono', size: 9 }, callback: (v) => v.toFixed(0) + '%' }
-                    },
-                    x: { 
-                        grid: { display: false }, 
-                        ticks: { font: { size: 9 }, maxRotation: 45 } 
-                    }
-                }
-            }
-        });
-    }
-}
+function updateChart(){const ctx=document.getElementById('assetChart').getContext('2d');const ys=selectedYear.toString();const sl=sortLogs(historyLog.map(h=>({...h,pct:parseFloat(h.pct)}))).filter(h=>h.date.includes(ys));
+    const db={};sl.forEach(l=>{const k=l.date.split(' . ').slice(1,3).join('.');if(!db[k]||l.pct>db[k])db[k]=l.pct;});
+    const labels=Object.keys(db),data=Object.values(db);
+    if(assetChart){assetChart.data.labels=labels;assetChart.data.datasets[0].data=data;assetChart.update();}
+    else{assetChart=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Achievement %',data,borderColor:'#0ea5e9',backgroundColor:'rgba(14,165,233,0.1)',borderWidth:2,fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:'#fff',pointBorderColor:'#0ea5e9',pointBorderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(2)+'%'}}},scales:{y:{beginAtZero:false,grid:{color:'rgba(0,0,0,0.03)'},ticks:{font:{family:'JetBrains Mono',size:9},callback:v=>v.toFixed(0)+'%'}},x:{grid:{display:false},ticks:{font:{size:9},maxRotation:45}}}}});}}
 
 // ==================== MODAL ====================
-const modal = document.getElementById('past-record-modal');
+const modal=document.getElementById('past-record-modal');
+function toggleModal(){modal.classList.toggle('opacity-0');modal.classList.toggle('pointer-events-none');document.body.classList.toggle('modal-active');modal.querySelector('.modal-container').classList.toggle('scale-95');modal.querySelector('.modal-container').classList.toggle('scale-100');}
+document.getElementById('add-past-btn').addEventListener('click',()=>{haptic('light');toggleModal();const n=new Date();document.getElementById('past-date').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}-${String(n.getDate()).padStart(2,'0')}`;document.getElementById('past-time').value=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;});
+document.querySelectorAll('.modal-close,.modal-overlay').forEach(el=>el.addEventListener('click',toggleModal));
 
-function toggleModal() {
-    modal.classList.toggle('opacity-0');
-    modal.classList.toggle('pointer-events-none');
-    document.body.classList.toggle('modal-active');
-    modal.querySelector('.modal-container').classList.toggle('scale-95');
-    modal.querySelector('.modal-container').classList.toggle('scale-100');
-}
-
-document.getElementById('add-past-btn').addEventListener('click', () => {
-    haptic('light');
-    toggleModal();
-    const now = new Date();
-    document.getElementById('past-date').value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    document.getElementById('past-time').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-});
-
-document.querySelectorAll('.modal-close, .modal-overlay').forEach(el => {
-    el.addEventListener('click', toggleModal);
-});
-
-document.getElementById('save-past-btn').addEventListener('click', async () => {
-    const dateVal = document.getElementById('past-date').value;
-    const timeVal = document.getElementById('past-time').value;
-    const krwVal = document.getElementById('past-krw').value.replace(/,/g, '');
-    const btn = document.getElementById('save-past-btn');
-    
-    if (!dateVal || !krwVal || !timeVal) { 
-        tg.showAlert('날짜, 시간, 금액을 모두 입력해주세요.'); 
-        return; 
-    }
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) { 
-        tg.showAlert('날짜 형식이 올바르지 않습니다.'); 
-        return; 
-    }
-    if (!/^\d{2}:\d{2}$/.test(timeVal)) { 
-        tg.showAlert('시간 형식이 올바르지 않습니다.'); 
-        return; 
-    }
-    if (new Date(dateVal) < new Date("2026-01-01")) { 
-        tg.showAlert('2026년 1월 1일 이전 데이터는 기록할 수 없습니다.'); 
-        return; 
-    }
-
-    const dObj = new Date(dateVal);
-    const dateStr = `${dObj.getFullYear()} . ${String(dObj.getMonth() + 1).padStart(2, '0')} . ${String(dObj.getDate()).padStart(2, '0')} . (${DAYS[dObj.getDay()]})`;
-
-    const isDuplicate = historyLog.some(log => log.date === dateStr && log.time === timeVal);
-    if (isDuplicate) { 
-        tg.showAlert("중복된 기록입니다."); 
-        return; 
-    }
-
-    btn.innerText = "저장 중...";
-    btn.disabled = true;
-
-    try {
-        const targetDate = new Date(dateVal + "T00:00:00Z");
-        const targetYear = targetDate.getFullYear();
-        targetDate.setUTCDate(targetDate.getUTCDate() + 1);
-        const isoStr = targetDate.toISOString();
-
-        ensureRoadmapCoverage(targetYear);
-        let mission = roadmap.find(r => r.year === targetYear) || roadmap[roadmap.length - 1];
-
-        const resBtc = await fetch(`https://api.upbit.com/v1/candles/days?market=KRW-BTC&to=${isoStr}&count=1`);
-        const jsonBtc = await resBtc.json();
-        const pastBtcPrice = jsonBtc[0].trade_price;
-
-        const resXaut = await fetch(`https://api.upbit.com/v1/candles/days?market=KRW-XAUT&to=${isoStr}&count=1`);
-        const jsonXaut = await resXaut.json();
-        const pastXautPrice = jsonXaut[0].trade_price;
-
-        const pastTargetVal = (pastBtcPrice * mission.btc) + (pastXautPrice * mission.xaut);
-        const pct = (parseFloat(krwVal) / pastTargetVal * 100).toFixed(2);
-
-        const newRecord = {
-            date: dateStr,
-            time: timeVal,
-            pct: pct,
-            krw: krwVal,
-            b: pastBtcPrice,
-            x: pastXautPrice,
-            targetVal: Math.round(pastTargetVal),
-            isPast: true
-        };
-
-        await saveToCloud(newRecord);
-        
-        selectedYear = targetYear;
-        updateYearUI();
-        toggleModal();
-        document.getElementById('past-krw').value = '';
-        
-    } catch (e) {
-        console.error(e);
-        tg.showAlert('저장 실패: ' + e.message);
-    } finally {
-        btn.innerText = "기록 저장";
-        btn.disabled = false;
-    }
-});
+document.getElementById('save-past-btn').addEventListener('click',async()=>{
+    const dateVal=document.getElementById('past-date').value,timeVal=document.getElementById('past-time').value,krwVal=document.getElementById('past-krw').value.replace(/,/g,''),btn=document.getElementById('save-past-btn');
+    if(!dateVal||!krwVal||!timeVal){showAlert('날짜, 시간, 금액을 모두 입력해주세요.');return;}
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(dateVal)){showAlert('날짜 형식이 올바르지 않습니다.');return;}
+    if(!/^\d{2}:\d{2}$/.test(timeVal)){showAlert('시간 형식이 올바르지 않습니다.');return;}
+    if(new Date(dateVal)<new Date("2026-01-01")){showAlert('2026년 1월 1일 이전 데이터는 기록할 수 없습니다.');return;}
+    const dObj=new Date(dateVal);const dateStr=`${dObj.getFullYear()} . ${String(dObj.getMonth()+1).padStart(2,'0')} . ${String(dObj.getDate()).padStart(2,'0')} . (${DAYS[dObj.getDay()]})`;
+    if(historyLog.some(l=>l.date===dateStr&&l.time===timeVal)){showAlert("중복된 기록입니다.");return;}
+    btn.innerText="저장 중...";btn.disabled=true;
+    try{
+        const td=new Date(dateVal+"T00:00:00Z");const ty=td.getFullYear();td.setUTCDate(td.getUTCDate()+1);const iso=td.toISOString();
+        ensureRoadmapCoverage(ty);let m=roadmap.find(r=>r.year===ty)||roadmap[roadmap.length-1];
+        const [jb,jx]=await Promise.all([fetch(`https://api.upbit.com/v1/candles/days?market=KRW-BTC&to=${iso}&count=1`).then(r=>r.json()),fetch(`https://api.upbit.com/v1/candles/days?market=KRW-XAUT&to=${iso}&count=1`).then(r=>r.json())]);
+        const bp=jb[0].trade_price,xp=jx[0].trade_price,tv=(bp*m.btc)+(xp*m.xaut),pct=(parseFloat(krwVal)/tv*100).toFixed(2);
+        await appendSnapshot({date:dateStr,time:timeVal,pct,krw:krwVal,b:bp,x:xp,targetVal:Math.round(tv),isPast:true});
+        selectedYear=ty;updateYearUI();toggleModal();document.getElementById('past-krw').value='';
+    }catch(e){console.error(e);showAlert('저장 실패: '+e.message);}
+    finally{btn.innerText="기록 저장";btn.disabled=false;}});
 
 // ==================== SNAPSHOT ====================
-async function saveSnapshot() {
-    if (!state.btc) {
-        tg.showAlert('시세 데이터를 불러오는 중입니다.');
-        return;
-    }
-    
-    const rawKrw = krwInput.value.replace(/,/g, "");
-    if (!rawKrw || parseFloat(rawKrw) === 0) {
-        tg.showAlert('현재 자산을 입력해주세요.');
-        return;
-    }
-    
-    haptic('medium');
-    tg.MainButton.showProgress();
-
-    const now = new Date();
-    const year = now.getFullYear();
-    let mission = roadmap.find(r => r.year === year);
-    if (!mission) {
-        ensureRoadmapCoverage(year);
-        mission = roadmap.find(r => r.year === year);
-    }
-
-    const targetVal = (state.btc * mission.btc) + (state.xaut * mission.xaut);
-    
-    const record = {
-        date: `${now.getFullYear()} . ${String(now.getMonth() + 1).padStart(2, '0')} . ${String(now.getDate()).padStart(2, '0')} . (${DAYS[now.getDay()]})`,
-        time: `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`,
-        pct: (parseFloat(rawKrw) / targetVal * 100).toFixed(2),
-        krw: rawKrw,
-        b: state.btc,
-        x: state.xaut,
-        targetVal: Math.round(targetVal),
-        isPast: false
-    };
-    
-    await saveToCloud(record);
-    tg.MainButton.hideProgress();
-    tg.showAlert(`✅ 스냅샷 저장 완료!\n달성률: ${record.pct}%`);
-}
+async function saveSnapshot(){
+    if(!state.btc){showAlert('시세 데이터를 불러오는 중입니다.');return;}
+    const raw=krwInput.value.replace(/,/g,"");if(!raw||parseFloat(raw)===0){showAlert('현재 자산을 입력해주세요.');return;}
+    haptic('medium');if(isTelegram)tg.MainButton.showProgress();
+    const now=new Date(),yr=now.getFullYear();let m=roadmap.find(r=>r.year===yr);if(!m){ensureRoadmapCoverage(yr);m=roadmap.find(r=>r.year===yr);}
+    const tv=(state.btc*m.btc)+(state.xaut*m.xaut);
+    const rec={date:`${now.getFullYear()} . ${String(now.getMonth()+1).padStart(2,'0')} . ${String(now.getDate()).padStart(2,'0')} . (${DAYS[now.getDay()]})`,time:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,pct:(parseFloat(raw)/tv*100).toFixed(2),krw:raw,b:state.btc,x:state.xaut,targetVal:Math.round(tv),isPast:false};
+    await appendSnapshot(rec);if(isTelegram)tg.MainButton.hideProgress();showAlert(`✅ 스냅샷 저장 완료!\n달성률: ${rec.pct}%`);}
 
 // ==================== CLOCK ====================
-function updateClock() {
-    const n = new Date();
-    document.getElementById('clock-date').innerText = `${n.getFullYear()}.${String(n.getMonth() + 1).padStart(2, '0')}.${String(n.getDate()).padStart(2, '0')}`;
-    document.getElementById('clock-time').innerText = n.toLocaleTimeString('en-GB');
-}
+function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
 
 // ==================== INIT ====================
-updateYearUI();
-updateClock();
-setInterval(updateClock, 1000);
-setInterval(fetchTickers, 3000);
-setInterval(fetchForex, 30000);
-
-fetchTickers();
-fetchForex();
-loadFromCloud();
+async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);setInterval(fetchForex,30000);
+    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers(),fetchForex()]);}
+init();
 </script>
-
 </body>
 </html>
