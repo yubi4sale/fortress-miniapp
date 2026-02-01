@@ -373,16 +373,16 @@ function updateHistory(){const tb=document.getElementById('history-body');tb.inn
 
 document.getElementById('select-all-logs').onclick=e=>document.querySelectorAll('.log-item-checkbox').forEach(c=>c.checked=e.target.checked);
 document.getElementById('delete-selected-btn').onclick=async()=>{const sel=document.querySelectorAll('.log-item-checkbox:checked');if(!sel.length)return;
-    showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`,async ok=>{if(ok){
-        try{
-            haptic('warning');
-            const idxs=[...sel].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
-            idxs.forEach(i=>historyLog.splice(i,1));
-            const saved=await saveAllSnapshots();
-            updateHistory();
-            if(saved) showAlert(`${idxs.length}개 기록 삭제 완료`);
-        }catch(e){console.error("Delete error:",e);updateHistory();}
-    }});};
+    const ok=await new Promise(res=>showConfirm(`${sel.length}개의 기록을 삭제하시겠습니까?`,res));
+    if(!ok)return;
+    try{
+        haptic('warning');
+        const idxs=[...sel].map(c=>parseInt(c.dataset.idx)).sort((a,b)=>b-a);
+        idxs.forEach(i=>historyLog.splice(i,1));
+        await saveAllSnapshots();
+        updateHistory();
+        showAlert(`${idxs.length}개 기록 삭제 완료`);
+    }catch(e){console.error("Delete error:",e);showAlert("삭제 실패: "+e.message);updateHistory();}};
 
 // ==================== CHART ====================
 function updateChart(){const ctx=document.getElementById('assetChart').getContext('2d');const ys=selectedYear.toString();const sl=sortLogs(historyLog.map(h=>({...h,pct:parseFloat(h.pct)}))).filter(h=>h.date.includes(ys));
@@ -421,10 +421,15 @@ async function saveSnapshot(){
     if(!state.btc){showAlert('시세 데이터를 불러오는 중입니다.');return;}
     const raw=krwInput.value.replace(/,/g,"");if(!raw||parseFloat(raw)===0){showAlert('현재 자산을 입력해주세요.');return;}
     haptic('medium');if(isTelegram)tg.MainButton.showProgress();
-    const now=new Date(),yr=now.getFullYear();let m=roadmap.find(r=>r.year===yr);if(!m){ensureRoadmapCoverage(yr);m=roadmap.find(r=>r.year===yr);}
-    const tv=(state.btc*m.btc)+(state.xaut*m.xaut);
-    const rec={date:`${now.getFullYear()} . ${String(now.getMonth()+1).padStart(2,'0')} . ${String(now.getDate()).padStart(2,'0')} . (${DAYS[now.getDay()]})`,time:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,pct:(parseFloat(raw)/tv*100).toFixed(2),krw:raw,b:state.btc,x:state.xaut,targetVal:Math.round(tv),isPast:false};
-    await appendSnapshot(rec);if(isTelegram)tg.MainButton.hideProgress();showAlert(`✅ 스냅샷 저장 완료!\n달성률: ${rec.pct}%`);}
+    try{
+        const now=new Date(),yr=now.getFullYear();let m=roadmap.find(r=>r.year===yr);if(!m){ensureRoadmapCoverage(yr);m=roadmap.find(r=>r.year===yr);}
+        const tv=(state.btc*m.btc)+(state.xaut*m.xaut);
+        const rec={date:`${now.getFullYear()} . ${String(now.getMonth()+1).padStart(2,'0')} . ${String(now.getDate()).padStart(2,'0')} . (${DAYS[now.getDay()]})`,time:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,pct:(parseFloat(raw)/tv*100).toFixed(2),krw:raw,b:state.btc,x:state.xaut,targetVal:Math.round(tv),isPast:false};
+        await appendSnapshot(rec);
+        showAlert(`✅ 스냅샷 저장 완료!\n달성률: ${rec.pct}%`);
+    }catch(e){console.error("Snapshot error:",e);showAlert("스냅샷 오류: "+e.message);}
+    finally{if(isTelegram)tg.MainButton.hideProgress();}
+}
 
 // ==================== CLOCK ====================
 function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
