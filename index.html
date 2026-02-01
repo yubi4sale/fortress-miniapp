@@ -154,16 +154,6 @@
     </div>
     <!-- HISTORY -->
     <div class="section" id="section-history">
-        <!-- 마이그레이션 배너 (1회용) -->
-        <div id="migrate-banner" class="mb-4 p-4 rounded-xl bg-amber-50 border border-amber-200" style="display:none;">
-            <p class="text-xs font-bold text-amber-700 mb-2">📦 이전 Google Sheets 기록이 있나요?</p>
-            <p class="text-[10px] text-amber-600 mb-3">한 번 클릭으로 기존 기록을 모두 가져옵니다.</p>
-            <div class="flex gap-2">
-                <button id="migrate-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-amber-500 text-white active:bg-amber-600">기록 가져오기</button>
-                <button id="migrate-dismiss-btn" class="py-2.5 px-4 rounded-xl text-xs font-bold bg-white text-amber-500 border border-amber-300">닫기</button>
-            </div>
-            <p id="migrate-status" class="text-[10px] text-amber-600 mt-2" style="display:none;"></p>
-        </div>
         <div class="flex justify-center items-center gap-6 mb-4"><span id="prev-year-btn" class="nav-arrow disabled brand-font">&lt;</span><h2 class="text-2xl font-black brand-font w-20 text-center" id="display-year">2026</h2><span id="next-year-btn" class="nav-arrow active brand-font">&gt;</span></div>
         <div class="flex gap-2 mb-4"><button id="add-past-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-sky-50 text-sky-600 active:bg-sky-100">+ 과거 기록</button><button id="delete-selected-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-500 active:bg-rose-100">선택 삭제</button></div>
         <div class="card overflow-hidden"><div class="scrollable-table"><table class="w-full text-left"><thead class="sticky top-0 bg-white z-10"><tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100"><th class="p-3 w-8"><input type="checkbox" id="select-all-logs" class="w-4 h-4 rounded"></th><th class="p-3">Time</th><th class="p-3">달성률</th><th class="p-3 text-right">BTC</th><th class="p-3 text-right">XAUT</th><th class="p-3 text-right">순자산</th></tr></thead><tbody id="history-body" class="divide-y divide-gray-50"></tbody></table></div></div>
@@ -460,85 +450,9 @@ async function saveSnapshot(){
 // ==================== CLOCK ====================
 function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
 
-// ==================== MIGRATION (Google Sheets → CloudStorage) ====================
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzmlWwtrc-svURyEg8t6fON5UcXy4oCd5RLJ8rFgt3OR6DPGrtQp8aMkVwETRFCDgR3/exec";
-
-async function checkMigration() {
-    const done = await sGet('ft_migrated');
-    if (done === 'true') return;
-    document.getElementById('migrate-banner').style.display = 'block';
-}
-
-document.getElementById('migrate-btn').onclick = async () => {
-    const btn = document.getElementById('migrate-btn');
-    const status = document.getElementById('migrate-status');
-    btn.disabled = true;
-    btn.innerText = '가져오는 중...';
-    status.style.display = 'block';
-    status.innerText = '⏳ Google Sheets에서 데이터 읽는 중...';
-    
-    try {
-        const res = await fetch(GAS_URL);
-        const data = await res.json();
-        
-        if (!data || !Array.isArray(data) || data.length === 0) {
-            status.innerText = '⚠️ 가져올 기록이 없습니다.';
-            btn.innerText = '기록 없음';
-            return;
-        }
-        
-        status.innerText = `📦 ${data.length}개 기록 발견. 저장 중...`;
-        
-        // 중복 제거: 같은 date+time이면 스킵
-        let added = 0;
-        for (const record of data) {
-            // 시간 정제 (Google Sheets의 1899-12-30T... → HH:MM)
-            record.time = parseTime(record.time);
-            // isPast 필드 없으면 false로
-            if (record.isPast === undefined) record.isPast = false;
-            const isDup = historyLog.some(h => h.date === record.date && parseTime(h.time) === record.time);
-            if (!isDup) {
-                historyLog.push(record);
-                added++;
-            }
-        }
-        
-        if (added === 0) {
-            status.innerText = '✅ 모든 기록이 이미 존재합니다.';
-        } else {
-            // CloudStorage에 전체 저장
-            await saveAllSnapshots();
-            updateHistory();
-            status.innerText = `✅ ${added}개 기록 가져오기 완료!`;
-        }
-        
-        // 마이그레이션 완료 표시
-        await sSet('ft_migrated', 'true');
-        
-        btn.innerText = '완료!';
-        setTimeout(() => {
-            document.getElementById('migrate-banner').style.display = 'none';
-        }, 3000);
-        
-    } catch (e) {
-        console.error("Migration error:", e);
-        status.innerText = '❌ 가져오기 실패: ' + e.message;
-        btn.innerText = '다시 시도';
-        btn.disabled = false;
-    }
-};
-
-document.getElementById('migrate-dismiss-btn').onclick = async () => {
-    document.getElementById('migrate-banner').style.display = 'none';
-    await sSet('ft_migrated', 'true');
-};
-
 // ==================== INIT ====================
 async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);setInterval(fetchForex,30000);
-    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers(),fetchForex()]);
-    // 재마이그레이션을 위해 플래그 리셋 (이 줄은 마이그레이션 완료 후 제거)
-    await sSet('ft_migrated', 'false');
-    checkMigration();}
+    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers(),fetchForex()]);}
 init();
 </script>
 </body>
