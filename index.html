@@ -163,7 +163,7 @@
         </div>
         <div class="flex justify-center items-center gap-6 mb-4"><span id="prev-year-btn" class="nav-arrow disabled brand-font">&lt;</span><h2 class="text-2xl font-black brand-font w-20 text-center" id="display-year">2026</h2><span id="next-year-btn" class="nav-arrow active brand-font">&gt;</span></div>
         <div class="flex gap-2 mb-4"><button id="add-past-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-sky-50 text-sky-600 active:bg-sky-100">+ 과거 기록</button><button id="delete-selected-btn" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-500 active:bg-rose-100">선택 삭제</button></div>
-        <div class="card overflow-hidden"><div class="scrollable-table"><table class="w-full text-left"><thead class="sticky top-0 bg-white z-10"><tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100"><th class="p-3 w-8"><input type="checkbox" id="select-all-logs" class="w-4 h-4 rounded"></th><th class="p-3">Time</th><th class="p-3">달성률</th><th class="p-3 text-right">순자산</th></tr></thead><tbody id="history-body" class="divide-y divide-gray-50"></tbody></table></div></div>
+        <div class="card overflow-hidden"><div class="scrollable-table"><table class="w-full text-left"><thead class="sticky top-0 bg-white z-10"><tr class="text-[9px] font-bold uppercase tracking-wider opacity-50 border-b border-gray-100"><th class="p-3 w-8"><input type="checkbox" id="select-all-logs" class="w-4 h-4 rounded"></th><th class="p-3">Time</th><th class="p-3">달성률</th><th class="p-3 text-right">BTC</th><th class="p-3 text-right">XAUT</th><th class="p-3 text-right">순자산</th></tr></thead><tbody id="history-body" class="divide-y divide-gray-50"></tbody></table></div></div>
     </div>
 </div>
 <!-- MODAL -->
@@ -246,6 +246,8 @@ async function loadAllSnapshots() {
         const results = await sGetItems(keys);
         historyLog = [];
         for (let i=0;i<n;i++) { const raw=results[`ft_c_${i}`]; if(raw) historyLog.push(...JSON.parse(raw)); }
+        // 기존 데이터 시간 정제
+        historyLog.forEach(h => { h.time = parseTime(h.time); });
         updateHistory();
     } catch(e) { console.error("Load Error:",e); showAlert("데이터 불러오기 실패"); }
     finally { setSyncState(false); }
@@ -307,6 +309,8 @@ let isEditing = false, assetChart = null;
 let selectedYear = Math.max(new Date().getFullYear(), 2026);
 
 function formatWithCommas(n) { if(!n)return"0"; let num=typeof n==='string'?parseFloat(n.replace(/,/g,'')):n; return isNaN(num)?"0":num.toLocaleString(); }
+function parseTime(t) { if(!t)return"--:--"; if(typeof t==='string'&&t.includes('T')){const d=new Date(t);return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');} return t; }
+function shortPrice(n) { if(!n)return"-"; const v=typeof n==='string'?parseFloat(n):n; if(isNaN(v))return"-"; if(v>=1e8)return(v/1e8).toFixed(1)+'억'; if(v>=1e4)return Math.round(v/1e4)+'만'; return v.toLocaleString(); }
 
 // ==================== TABS ====================
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -377,7 +381,11 @@ document.getElementById('next-year-btn').onclick=()=>changeYear(1);
 function updateHistory(){const tb=document.getElementById('history-body');tb.innerHTML='';const ys=selectedYear.toString();const sl=sortLogs([...historyLog]).filter(h=>h.date.includes(ys));const rl=[...sl].reverse();
     document.getElementById('select-all-logs').checked=false;
     rl.forEach(h=>{const idx=historyLog.findIndex(item=>item===h);
-        tb.innerHTML+=`<tr class="hover:bg-gray-50 transition-colors"><td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${idx}"></td><td class="p-3 mono text-[10px]"><div class="opacity-50">${h.date.split(' . ').slice(1,3).join('/')}</div><div class="font-bold">${h.time}</div></td><td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td><td class="p-3 text-right font-bold mono text-sm">₩ ${formatWithCommas(h.krw)}</td></tr>`;});
+        const displayTime=parseTime(h.time);
+        const star=h.isPast?'<span class="text-amber-400">*</span>':'';
+        const btcDisplay=h.b?shortPrice(h.b)+star:'-';
+        const xautDisplay=h.x?shortPrice(h.x)+star:'-';
+        tb.innerHTML+=`<tr class="hover:bg-gray-50 transition-colors"><td class="p-3"><input type="checkbox" class="log-item-checkbox w-4 h-4 rounded" data-idx="${idx}"></td><td class="p-3 mono text-[10px]"><div class="opacity-50">${h.date.split(' . ').slice(1,3).join('/')}</div><div class="font-bold">${displayTime}</div></td><td class="p-3 text-emerald-500 font-extrabold mono">${h.pct}%</td><td class="p-3 text-right mono text-[10px]">${btcDisplay}</td><td class="p-3 text-right mono text-[10px] text-amber-500">${xautDisplay}</td><td class="p-3 text-right font-bold mono text-sm">₩ ${formatWithCommas(h.krw)}</td></tr>`;});
     document.querySelectorAll('.log-item-checkbox').forEach(cb=>cb.addEventListener('change',()=>{const all=document.querySelectorAll('.log-item-checkbox');document.getElementById('select-all-logs').checked=all.length>0&&Array.from(all).every(c=>c.checked);}));
     updateChart();}
 
@@ -479,7 +487,11 @@ document.getElementById('migrate-btn').onclick = async () => {
         // 중복 제거: 같은 date+time이면 스킵
         let added = 0;
         for (const record of data) {
-            const isDup = historyLog.some(h => h.date === record.date && h.time === record.time);
+            // 시간 정제 (Google Sheets의 1899-12-30T... → HH:MM)
+            record.time = parseTime(record.time);
+            // isPast 필드 없으면 false로
+            if (record.isPast === undefined) record.isPast = false;
+            const isDup = historyLog.some(h => h.date === record.date && parseTime(h.time) === record.time);
             if (!isDup) {
                 historyLog.push(record);
                 added++;
