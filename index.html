@@ -104,6 +104,10 @@
             <button onclick="exportBackup()" class="w-10 h-10 rounded-xl glass flex items-center justify-center active:opacity-60" title="데이터 백업">
                 <span class="material-symbols-outlined text-xl opacity-40">download</span>
             </button>
+            <button onclick="document.getElementById('import-file').click()" class="w-10 h-10 rounded-xl glass flex items-center justify-center active:opacity-60" title="데이터 복원">
+                <span class="material-symbols-outlined text-xl opacity-40">upload</span>
+            </button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(this)">
         </div>
     </header>
     <div class="glass p-3 rounded-xl flex items-center gap-3 mb-6 border-l-4 border-l-sky-500">
@@ -368,10 +372,10 @@ function runCalc(){const b=parseFloat(document.getElementById('calc-btc').value)
 // ==================== ROADMAP ====================
 function ensureRoadmapCoverage(y){const mx=roadmap[roadmap.length-1].year;if(y>mx){const last=roadmap[roadmap.length-1];for(let i=mx+1;i<=y;i++)roadmap.push({year:i,btc:last.btc,xaut:last.xaut});saveRoadmap();}}
 function updateRoadmap(){const tb=document.getElementById('roadmap-body');tb.innerHTML='';const yr=new Date().getFullYear();ensureRoadmapCoverage(yr+4);
-    roadmap.forEach((r,i)=>{if(r.year<yr||r.year>yr+4)return;const a=r.year===yr;const v=((state.btc||0)*r.btc)+((state.xaut||0)*r.xaut);const vStr=v>0?'₩ '+Math.round(v).toLocaleString():'시세 대기중...';
+    roadmap.forEach((r,i)=>{if(r.year<yr||r.year>yr+4)return;const a=r.year===yr;const v=(state.btc*r.btc)+(state.xaut*r.xaut);
         const bC=isEditing?`<input type="number" step="0.01" value="${r.btc}" class="w-14 rounded p-1 text-xs mono text-center" data-idx="${i}" data-type="btc">`:`${r.btc} BTC`;
         const xC=isEditing?`<input type="number" step="0.01" value="${r.xaut}" class="w-14 rounded p-1 text-xs mono text-center text-amber-600" data-idx="${i}" data-type="xaut">`:`${r.xaut} XAUT`;
-        tb.innerHTML+=`<tr class="${a?'':'opacity-80'} transition-colors" ${a?'style="background:var(--tg-theme-button-color,#0ea5e9)11"':''}><td class="p-4 text-lg brand-font font-bold ${a?'text-sky-500':'opacity-50'}">${r.year}</td><td class="p-4 mono text-xs"><div class="font-bold">${bC}</div><div class="mt-1 font-bold text-amber-500">${xC}</div></td><td class="p-4 text-right mono text-sm font-bold">${vStr}</td></tr>`;});
+        tb.innerHTML+=`<tr class="${a?'':'opacity-80'} transition-colors" ${a?'style="background:var(--tg-theme-button-color,#0ea5e9)11"':''}><td class="p-4 text-lg brand-font font-bold ${a?'text-sky-500':'opacity-50'}">${r.year}</td><td class="p-4 mono text-xs"><div class="font-bold">${bC}</div><div class="mt-1 font-bold text-amber-500">${xC}</div></td><td class="p-4 text-right mono text-sm font-bold">₩ ${Math.round(v).toLocaleString()}</td></tr>`;});
     if(isEditing)document.querySelectorAll('input[data-idx]').forEach(inp=>inp.addEventListener('change',e=>{roadmap[e.target.dataset.idx][e.target.dataset.type]=parseFloat(e.target.value);}));}
 document.getElementById('edit-btn').onclick=()=>{haptic('light');isEditing=!isEditing;document.getElementById('edit-btn').innerText=isEditing?"저장":"수정";if(!isEditing){saveRoadmap();render();}else updateRoadmap();};
 document.getElementById('calc-btc').oninput=runCalc;
@@ -465,50 +469,55 @@ async function exportBackup(){
     haptic('medium');
     const payload=JSON.stringify({version:1,exported:new Date().toISOString(),roadmap,snapshots:historyLog},null,2);
     const date=new Date().toISOString().slice(0,10);
-    const fname=`fortress_backup_${date}.json`;
-
-    if(!isTelegram){
-        // 브라우저: 파일 다운로드
+    // 브라우저: 파일 다운로드 시도
+    try{
         const blob=new Blob([payload],{type:'application/json'});
         const url=URL.createObjectURL(blob);
-        const a=document.createElement('a');a.href=url;a.download=fname;
+        const a=document.createElement('a');a.href=url;a.download=`fortress_backup_${date}.json`;
         document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
         showAlert(`✅ 백업 완료!\n스냅샷 ${historyLog.length}건`);
-        return;
+    }catch(e){
+        // 텔레그램 미니앱에서 다운로드 안 되면 클립보드 복사
+        try{await navigator.clipboard.writeText(payload);showAlert(`✅ 클립보드에 복사됨!\n스냅샷 ${historyLog.length}건\n\n메모장에 붙여넣기 하세요.`);}
+        catch(e2){showAlert('백업 실패: '+e2.message);}
     }
-    // 텔레그램: textarea 선택 → execCommand copy (가장 호환성 높음)
-    const ta=document.createElement('textarea');
-    ta.value=payload;ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0';
-    document.body.appendChild(ta);ta.focus();ta.select();
-    let copied=false;
-    try{copied=document.execCommand('copy');}catch(e){}
-    document.body.removeChild(ta);
-    if(copied){
-        showAlert(`✅ 클립보드에 복사됨!\n스냅샷 ${historyLog.length}건\n\n메모장에 붙여넣기 해서 보관하세요.`);
-    }else{
-        // execCommand도 안 되면 데이터를 봇 채팅으로 전송
-        try{tg.sendData(payload);} catch(e){showAlert('백업 실패: 텔레그램에서 클립보드 접근이 제한됩니다.');}
-    }
+}
+
+async function importBackup(input){
+    const file=input.files[0];
+    input.value='';
+    if(!file)return;
+    haptic('medium');
+    try{
+        const text=await file.text();
+        const data=JSON.parse(text);
+        if(!data.snapshots||!Array.isArray(data.snapshots)){showAlert('잘못된 백업 파일입니다.');return;}
+        // 스냅샷 병합 (중복 제거: 같은 시간 기록 스킵)
+        const existingTimes=new Set(historyLog.map(h=>h.time));
+        const newEntries=data.snapshots.filter(s=>!existingTimes.has(s.time));
+        historyLog.push(...newEntries);
+        historyLog.sort((a,b)=>new Date(a.time)-new Date(b.time));
+        // 로드맵 복원 (기존 데이터 없을 때만)
+        if(data.roadmap&&Array.isArray(data.roadmap)){
+            const hasExisting=await sGet('ft_rm');
+            if(!hasExisting)roadmap=data.roadmap.filter(r=>r.year>=2026);
+            // 기존 로드맵이 있으면 유지 (덮어쓰기 방지)
+        }
+        await saveAllSnapshots();
+        await saveRoadmap();
+        updateHistory();
+        render();
+        showAlert(`복원 완료!\n새로 추가: ${newEntries.length}건\n전체: ${historyLog.length}건`);
+    }catch(e){showAlert('복원 실패: '+e.message);}
 }
 
 // ==================== CLOCK ====================
 function updateClock(){const n=new Date();document.getElementById('clock-date').innerText=`${n.getFullYear()}.${String(n.getMonth()+1).padStart(2,'0')}.${String(n.getDate()).padStart(2,'0')}`;document.getElementById('clock-time').innerText=n.toLocaleTimeString('en-GB');}
 
 // ==================== INIT ====================
-async function init(){
-    // 1. UI 즉시 렌더 (데이터 없이)
-    updateYearUI();updateClock();updateRoadmap();
-    setInterval(updateClock,1000);
-
-    // 2. 저장된 KRW 복원 (빠름 - 단일 키)
-    try{const saved=await sGet('ft_lastKrw');if(saved){krwInput.value=formatWithCommas(saved);}}catch(e){}
-
-    // 3. 시세 + 스냅샷 + 로드맵 병렬 로드 (각각 독립, 실패해도 나머지 진행)
-    fetchTickers();
-    setInterval(fetchTickers,3000);
-    loadRoadmap().then(()=>updateRoadmap());
-    loadAllSnapshots();
-}
+async function init(){updateYearUI();updateClock();setInterval(updateClock,1000);setInterval(fetchTickers,3000);
+    await Promise.all([loadRoadmap(),loadAllSnapshots(),fetchTickers()]);
+    try{const saved=await sGet('ft_lastKrw');if(saved){krwInput.value=formatWithCommas(saved);render();}}catch(e){}}
 init();
 </script>
 </body>
